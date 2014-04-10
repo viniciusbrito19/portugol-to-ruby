@@ -67,7 +67,7 @@ fclose(arq);
 arq = fopen("teste.rb","a");
 fprintf(arq,"def \n");
 fclose(arq);
-}Declaracao_Variaveis
+}
 ;
 
 Fim:
