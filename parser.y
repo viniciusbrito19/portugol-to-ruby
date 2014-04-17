@@ -10,29 +10,32 @@ FILE *arq;
 
 //%token T_STRING 
 %token T_ALGORITMO
-%token T_VARIAVEIS
-%token T_IMPRIMA
-%token T_NOME_VARIAVEL
 %token T_DIGIT
-%token T_FIM
-%token T_SE
 %token T_ENTAO
-%token T_SENAO
-%token T_PARA
+%token T_FIM
 %token T_FIM_SE
 %token T_FIM_VARIAVEIS
+%token T_IMPRIMA
+%token T_NOME_VARIAVEL
+%token T_PARA
+%token T_PONTO_VIRGULA
+%token T_RECEBER
+%token T_SE
+%token T_SENAO
 %token T_TIPO_INTEIRO
 %token T_TIPO_CARACTERE
 %token T_TIPO_REAL
 %token T_TIPO_LOGICO
 %token T_TIPO_LITERAL
 %token T_VIRGULA
+%token T_VARIAVEIS
 //RT-AN66R(U)
 //RT-AC66
-//%{
-//char str1[1000];
-//extern char* yytext;
-//%}
+%{
+char str1[1000];
+char buffer[1000];
+extern char* yytext;
+%}
 
 %error-verbose
  
@@ -40,12 +43,35 @@ FILE *arq;
 
 
 stmt:
-	total
+	Declaracao
 ;
- 
+
+Declara_Tipo:
+		Lista_Variaveis Tipo_Variavel
+;
+
+Declaracao:
+		Declara_Tipo
+
+	|	T_VARIAVEIS Declaracao Declara_Tipo T_FIM_VARIAVEIS
+{
+arq = fopen("teste.rb","a");
+fprintf(arq,"def \n %s \n end", str1);
+fclose(arq);
+}
+;
+
 Lista_Variaveis:
 		Variavel
-	|	Lista_Variaveis T_VIRGULA Variavel
+{
+strcpy(buffer, yytext);
+strcat(str1, buffer);
+}
+	|	Lista_Variaveis T_VIRGULA Variavel 
+{
+strcpy(buffer, yytext);
+strcat(str1, buffer);
+}
 ;
 
 Variavel:
@@ -53,48 +79,19 @@ Variavel:
 	|	'`' T_NOME_VARIAVEL '`'
 ;
  
-total:
-		T_VARIAVEIS Lista_Variaveis T_TIPO_REAL 
+Tipo_Variavel:
+	T_RECEBER T_TIPO_INTEIRO T_PONTO_VIRGULA
+
+	| T_RECEBER T_TIPO_CARACTERE T_PONTO_VIRGULA
+
+	| T_RECEBER T_TIPO_REAL T_PONTO_VIRGULA
+
+	| T_RECEBER T_TIPO_LOGICO T_PONTO_VIRGULA
+
+	| T_RECEBER T_TIPO_LITERAL T_PONTO_VIRGULA
 ;
 
 /*
-Tipo_Variavel:
-	T_TIPO_INTEIRO
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"def \n");
-fclose(arq);
-}
-
-	| T_TIPO_CARACTERE
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"def \n");
-fclose(arq);
-}
-
-	| T_TIPO_REAL 
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"def \n");
-fclose(arq);
-}
-
-	| T_TIPO_LOGICO 
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"def \n");
-fclose(arq);
-} 
-
-	| T_TIPO_LITERAL
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"def \n");
-fclose(arq);
-}
-;
-
 Fim:
 		T_FIM
 {
