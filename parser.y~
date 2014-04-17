@@ -1,5 +1,6 @@
 %{
 #include "common.h"
+#include "parser.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,6 +30,7 @@ FILE *arq;
 //RT-AC66
 %{
 char str1[1000];
+extern char* yytext;
 %}
 
 %error-verbose
@@ -37,35 +39,56 @@ char str1[1000];
 
 
 
-stmt:
-	Declaracao_Variaveis | Variaveis | Tipo_Variaveis | Imprima | Se | Entao | Senao | Fim_Se | Para | Fim |
+//stmt:
+//	 Declaracao_Variaveis | Inicio_Variaveis | Variaveis | Tipo_Variavel | Imprima | Se | Entao | Senao | Fim_Se | Para | Fim |
+//;
+
+Inicio_Variaveis:
+	T_VARIAVEIS Declaracao_Variaveis
 ;
 
 Declaracao_Variaveis:
-	T_NOME_VARIAVEL ("," T_NOME_VARIAVEL)* ":" (Tipo_Variavel)
-
+	T_NOME_VARIAVEL
 {
 arq = fopen("teste.rb","a");
-fprintf(arq," \n");
+fprintf(arq,"def %s \n", yytext);
 fclose(arq);
-}stmt
+}
 ;
-
 
 Tipo_Variavel:
 	T_TIPO_INTEIRO
 {
 arq = fopen("teste.rb","a");
-fprintf(arq,"def %s \n", T_TIPO_INTEIRO);
+fprintf(arq,"def \n");
+fclose(arq);
+}
+
+	| T_TIPO_CARACTERE
+{
+arq = fopen("teste.rb","a");
+fprintf(arq,"def %s \n", T_TIPO_CARACTERE);
+fclose(arq);
+}
+
+	| T_TIPO_REAL 
+{
+arq = fopen("teste.rb","a");
+fprintf(arq,"def %s \n", T_TIPO_REAL);
+fclose(arq);
+}
+
+	| T_TIPO_LOGICO 
+{
+arq = fopen("teste.rb","a");
+fprintf(arq,"def %s \n", T_TIPO_LOGICO);
 fclose(arq);
 } 
-	| T_TIPO_CARACTERE 
-	| T_TIPO_REAL 
-	| T_TIPO_LOGICO 
+
 	| T_TIPO_LITERAL
 {
 arq = fopen("teste.rb","a");
-fprintf(arq,"def \n");
+fprintf(arq,"def %s \n", T_TIPO_LITERAL);
 fclose(arq);
 }
 ;
@@ -76,7 +99,7 @@ Fim:
 arq = fopen("teste.rb","a");
 fprintf(arq,"end");
 fclose(arq);
-}stmt
+}
 ;
 
 Fim_Se:
@@ -85,7 +108,7 @@ Fim_Se:
 arq = fopen("teste.rb","a");
 fprintf(arq,"end \n");
 fclose(arq);
-}stmt
+}
 ;
 
 Variaveis:
@@ -94,18 +117,18 @@ Variaveis:
 arq = fopen("teste.rb","a");
 fprintf(arq,"def \n");
 fclose(arq);
-}stmt
+}
 ;
 
-field_list:
-		field
-	|	field_list ',' field
-;
+//field_list:
+//		field
+//	|	field_list ',' field
+//;
 
-field:
-		T_STRING
-	|	'`' T_STRING '`'
-;
+//field:
+//		T_STRING
+//	|	'`' T_STRING '`'
+//;
  
 Imprima:
 		T_IMPRIMA
@@ -114,7 +137,7 @@ arq = fopen("teste.rb","a");
 fprintf(arq,"puts \n");
 fclose(arq);
 //zeroChar(str1);
-}stmt
+}
 ;
 
 Se:
@@ -124,7 +147,7 @@ arq = fopen("teste.rb","a");
 fprintf(arq,"if \n");
 fclose(arq);
 //zeroChar(str1);
-}stmt
+}
 ;
 
 Entao:
@@ -134,7 +157,7 @@ arq = fopen("teste.rb","a");
 fprintf(arq,"then \n");
 fclose(arq);
 //zeroChar(str1);
-}stmt
+}
 ;
 
 Senao:
@@ -143,7 +166,7 @@ Senao:
 arq = fopen("teste.rb","a");
 fprintf(arq,"else \n");
 fclose(arq);
-}stmt
+}
 ;
 
 Para:
@@ -153,7 +176,7 @@ arq = fopen("teste.rb","a");
 fprintf(arq,"for \n");
 fclose(arq);
 //zeroChar(str1);
-}stmt
+}
 
 %%
  

@@ -5,9 +5,9 @@
  
 /* Definições */
 
-/*STRING [a-z][b-z0-9]* */
 
-NOME_VARIAVEL [a-zA-Z_] [a-zA-Z0-9_]*
+
+NOME_VARIAVEL [a-zA-Z_][a-zA-Z0-9_]*
 WHITESPACE [ \n\r\t]+
 DIGITS [0-9]+
 RECEBER [:][=]
@@ -29,15 +29,16 @@ ANY_CHAR .
 "PARA" { return T_PARA; }
 "FIM-VARIAVEIS" { return T_FIM_VARIAVEIS; }
 "FIM-SE" { return T_FIM_SE; }
-"INTEIRO" { return T_TIPO_VARIAVEIS; }
-"REAL" { return T_TIPO_VARIAVEIS; }
-"LÓGICO" { return T_TIPO_VARIAVEIS; }
-"LITERAL" { return T_TIPO_VARIAVEIS; }
-"CARACTERE" { return T_TIPO_VARIAVEIS; }
+"INTEIRO" { return T_TIPO_INTEIRO; }
+"REAL" { return T_TIPO_REAL; }
+"LÓGICO" { return T_TIPO_LOGICO; }
+"LITERAL" { return T_TIPO_LITERAL; }
+"CARACTERE" { return T_TIPO_CARACTERE; }
 
 
-/*{STRING} { return T_STRING; }*/
-NOME_VARIAVEL { return T_NOME_VARIAVEL }
+NOME_VARIAVEL { 
+yylval = yytext;
+return T_NOME_VARIAVEL; }
 {DIGITS} { return T_DIGIT; }
 "," { return ','; }
  

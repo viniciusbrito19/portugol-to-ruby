@@ -7,3 +7,11 @@ defif
 def 
 def 
 def 
+puts 
+def 
+if 
+then 
+else 
+end 
+for 
+enddef 

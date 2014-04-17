@@ -40,7 +40,7 @@
      T_ALGORITMO = 258,
      T_VARIAVEIS = 259,
      T_IMPRIMA = 260,
-     T_STRING = 261,
+     T_NOME_VARIAVEL = 261,
      T_DIGIT = 262,
      T_FIM = 263,
      T_SE = 264,
@@ -49,7 +49,11 @@
      T_PARA = 267,
      T_FIM_SE = 268,
      T_FIM_VARIAVEIS = 269,
-     T_TIPO_VARIAVEIS = 270
+     T_TIPO_INTEIRO = 270,
+     T_TIPO_CARACTERE = 271,
+     T_TIPO_REAL = 272,
+     T_TIPO_LOGICO = 273,
+     T_TIPO_LITERAL = 274
    };
 #endif
 

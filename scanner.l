@@ -5,9 +5,9 @@
  
 /* Definições */
 
-/*STRING [a-z][b-z0-9]* */
 
-NOME_VARIAVEL [a-zA-Z_] [a-zA-Z0-9_]*
+
+NOME_VARIAVEL [a-zA-Z_][a-zA-Z0-9_]*
 WHITESPACE [ \n\r\t]+
 DIGITS [0-9]+
 RECEBER [:][=]
@@ -36,8 +36,8 @@ ANY_CHAR .
 "CARACTERE" { return T_TIPO_CARACTERE; }
 
 
-/*{STRING} { return T_STRING; }*/
-NOME_VARIAVEL { return T_NOME_VARIAVEL }
+NOME_VARIAVEL { 
+return T_NOME_VARIAVEL; }
 {DIGITS} { return T_DIGIT; }
 "," { return ','; }
  
