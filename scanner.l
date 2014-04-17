@@ -1,13 +1,14 @@
 %{
 #include "common.h"
 #include "parser.h"
+FILE *arq;
 %}
  
 /* Definições */
 
 
 
-NOME_VARIAVEL [a-zA-Z_][a-zA-Z0-9_]*
+NOME_VARIAVEL[a-z][a-z0-9]*
 WHITESPACE [ \n\r\t]+
 DIGITS [0-9]+
 RECEBER [:][=]
@@ -29,18 +30,56 @@ ANY_CHAR .
 "PARA" { return T_PARA; }
 "FIM-VARIAVEIS" { return T_FIM_VARIAVEIS; }
 "FIM-SE" { return T_FIM_SE; }
-"INTEIRO" { return T_TIPO_INTEIRO; }
-"REAL" { return T_TIPO_REAL; }
-"LÓGICO" { return T_TIPO_LOGICO; }
-"LITERAL" { return T_TIPO_LITERAL; }
-"CARACTERE" { return T_TIPO_CARACTERE; }
 
+"INTEIRO" { 
+arq = fopen("teste.rb","a");
+fprintf(arq,"def \n");
+fclose(arq);
+return T_TIPO_INTEIRO;
+}
 
-NOME_VARIAVEL { 
-return T_NOME_VARIAVEL; }
+"REAL" { 
+arq = fopen("teste.rb","a");
+fprintf(arq,"def \n");
+fclose(arq);
+return T_TIPO_REAL; 
+}
+
+"LÓGICO" { 
+arq = fopen("teste.rb","a");
+fprintf(arq,"def \n");
+fclose(arq);
+return T_TIPO_LOGICO; 
+}
+"LITERAL" { 
+arq = fopen("teste.rb","a");
+fprintf(arq,"def \n");
+fclose(arq);
+return T_TIPO_LITERAL; 
+}
+"CARACTERE" { 
+arq = fopen("teste.rb","a");
+fprintf(arq,"def \n");
+fclose(arq);
+return T_TIPO_CARACTERE;
+}
+
+{NOME_VARIAVEL} {
+arq = fopen("teste.rb","a");
+fprintf(arq,"%s ", yytext);
+fclose(arq);
+return T_NOME_VARIAVEL; 
+}
+
 {DIGITS} { return T_DIGIT; }
-"," { return ','; }
+"," { 
+arq = fopen("teste.rb","a");
+fprintf(arq,",");
+fclose(arq);
+return T_VIRGULA; 
+}
  
 {ANY_CHAR} {
 	printf("Unexpected character in input: '%c' (ASCII=%d)\n", yytext[0], yytext[0]);
 }
+

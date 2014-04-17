@@ -26,36 +26,38 @@ FILE *arq;
 %token T_TIPO_REAL
 %token T_TIPO_LOGICO
 %token T_TIPO_LITERAL
+%token T_VIRGULA
 //RT-AN66R(U)
 //RT-AC66
-%{
-char str1[1000];
-extern char* yytext;
-%}
+//%{
+//char str1[1000];
+//extern char* yytext;
+//%}
 
 %error-verbose
  
 %%
 
 
-
-//stmt:
-//	 Declaracao_Variaveis | Inicio_Variaveis | Variaveis | Tipo_Variavel | Imprima | Se | Entao | Senao | Fim_Se | Para | Fim |
-//;
-
-Inicio_Variaveis:
-	T_VARIAVEIS Declaracao_Variaveis
+stmt:
+	total
+;
+ 
+Lista_Variaveis:
+		Variavel
+	|	Lista_Variaveis T_VIRGULA Variavel
 ;
 
-Declaracao_Variaveis:
-	T_NOME_VARIAVEL
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"def %c \n", yytext);
-fclose(arq);
-}
+Variavel:
+		T_NOME_VARIAVEL
+	|	'`' T_NOME_VARIAVEL '`'
+;
+ 
+total:
+		T_VARIAVEIS Lista_Variaveis T_TIPO_REAL 
 ;
 
+/*
 Tipo_Variavel:
 	T_TIPO_INTEIRO
 {
@@ -67,28 +69,28 @@ fclose(arq);
 	| T_TIPO_CARACTERE
 {
 arq = fopen("teste.rb","a");
-fprintf(arq,"def %s \n", T_TIPO_CARACTERE);
+fprintf(arq,"def \n");
 fclose(arq);
 }
 
 	| T_TIPO_REAL 
 {
 arq = fopen("teste.rb","a");
-fprintf(arq,"def %s \n", T_TIPO_REAL);
+fprintf(arq,"def \n");
 fclose(arq);
 }
 
 	| T_TIPO_LOGICO 
 {
 arq = fopen("teste.rb","a");
-fprintf(arq,"def %s \n", T_TIPO_LOGICO);
+fprintf(arq,"def \n");
 fclose(arq);
 } 
 
 	| T_TIPO_LITERAL
 {
 arq = fopen("teste.rb","a");
-fprintf(arq,"def %s \n", T_TIPO_LITERAL);
+fprintf(arq,"def \n");
 fclose(arq);
 }
 ;
@@ -177,7 +179,7 @@ fprintf(arq,"for \n");
 fclose(arq);
 //zeroChar(str1);
 }
-
+*/
 %%
  
 void yyerror(const char* errmsg)
