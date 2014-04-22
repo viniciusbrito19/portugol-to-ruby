@@ -1,0 +1,7 @@
+# Object files
+scanner.c
+scanner.o
+parser.c
+parser.o
+parser.h
+parser
