@@ -9,7 +9,7 @@ FILE *arq;
 %}
 
 //%token T_STRING 
-%token T_ALGORITMO
+/*%token T_ALGORITMO
 %token T_DIGIT
 %token T_ENTAO
 %token T_FIM
@@ -28,7 +28,14 @@ FILE *arq;
 %token T_TIPO_LOGICO
 %token T_TIPO_LITERAL
 %token T_VIRGULA
-%token T_VARIAVEIS
+%token T_VARIAVEIS*/
+%token T_IDENTIFICADOR
+//%token T_STRING_LIT
+%token T_INT_LIT
+%token T_REAL_LIT
+//%token T_CARAC_LIT
+//%token T_KW_VERDADEIRO
+//%token T_KW_FALSO
 //RT-AN66R(U)
 //RT-AC66
 %{
@@ -41,8 +48,7 @@ extern char* yytext;
  
 %%
 
-
-stmt:
+/*stmt:
 	Declaracao
 ;
 
@@ -89,94 +95,136 @@ Tipo_Variavel:
 	| T_RECEBER T_TIPO_LOGICO T_PONTO_VIRGULA
 
 	| T_RECEBER T_TIPO_LITERAL T_PONTO_VIRGULA
-;
+;*/
 
-/*
-Fim:
-		T_FIM
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"end");
-fclose(arq);
-}
-;
+algoritmo
+	: declaracao_algoritmo (var_decl_block)? stm_block (func_decls)*
+	;
 
-Fim_Se:
-		T_FIM_SE
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"end \n");
-fclose(arq);
-}
-;
+declaracao_algoritmo
+	: "algoritmo" T_IDENTIFICADOR ";"
+	;
 
-Variaveis:
-		T_VARIAVEIS
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"def \n");
-fclose(arq);
-}
-;
+var_decl_block
+	: "variáveis" (var_decl ";")+ "fim-variáveis"
+	;
 
-//field_list:
-//		field
-//	|	field_list ',' field
-//;
+var_decl
+	: T_IDENTIFICADOR ("," T_IDENTIFICADOR)* ":" (tp_primitivo | tp_matriz)
+	;
 
-//field:
-//		T_STRING
-//	|	'`' T_STRING '`'
-//;
- 
-Imprima:
-		T_IMPRIMA
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"puts \n");
-fclose(arq);
-//zeroChar(str1);
-}
-;
+tp_primitivo
+	: "inteiro"
+	| "real"
+	| "caractere"
+	| "literal"
+	| "lógico"
+	;
 
-Se:
-		T_SE
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"if \n");
-fclose(arq);
-//zeroChar(str1);
-}
-;
+tp_matriz
+	: "matriz" ("[" T_INT_LIT "]")+ "de" tp_prim_pl
+	;
 
-Entao:
-		T_ENTAO
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"then \n");
-fclose(arq);
-//zeroChar(str1);
-}
-;
+tp_prim_pl
+	: "inteiros"
+	| "reais"
+	| "caracteres"
+	| "literais"
+	| "lógicos"
+	;
 
-Senao:
-		T_SENAO
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"else \n");
-fclose(arq);
-}
-;
+stm_block
+	: "início" (stm_list)* "fim"
+	;
 
-Para:
-		T_PARA
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"for \n");
-fclose(arq);
-//zeroChar(str1);
-}
-*/
+stm_list
+	:stm_attr
+	| fcall ";"
+	| stm_ret
+	| stm_se
+	| stm_enquanto
+	| stm_para
+	;
+
+stm_ret
+	: "retorne" expr? ";"
+	;
+
+lvalue
+	: T_IDENTIFICADOR ("[" expr "]")*
+	;
+
+stm_attr
+	: lvalue ":=" expr ";"
+	;
+
+stm_se
+	: "se" expr "então" stm_list ("senão" stm_list)? "fim-se"
+	;
+
+stm_enquanto
+	: "enquanto" expr "faça" stm_list "fim-enquanto"
+	;
+
+stm_para
+	: "para" lvalue "de" expr "até" expr passo? "faça" stm_list "fim-para"
+	;
+
+passo
+	: "passo" ("+"|"-")? T_INT_LIT
+	;
+
+expr
+	: expr ("ou"|"||") expr
+	| expr ("e"|"&&") expr
+	| expr "|" expr
+	| expr "^" expr
+	| expr "&" expr
+	| expr ("="|"<>") expr
+	| expr (">"|">="|"<"|"<=" expr
+	| expr ("+" | "-") expr
+	| expr ( "/"|"*"|"%") expr
+	| ("+"|"-"|"~"|"não")? termo
+	;
+
+termo
+	:fcall
+	| lvalue
+	| literal
+	| "(" expr ")"
+	;
+
+fcall
+	: T_IDENTIFICADOR "(" fargs? ")"
+	;
+
+fargs
+	: expr ("," expr)*
+	;
+
+literal
+	: T_INT_LIT
+	| T_REAL_LIT
+	;
+
+func_decls
+	: "função" T_IDENTIFICADOR "(" fparams? ")" (":" tb_primitivo)?
+		fvar_decl
+		stm_block
+	;
+
+fvar_decl
+	: (var_decl ";")*
+	;
+
+fparams
+	:fparam ("," fparam)*
+	;
+
+fparam
+	: T_IDENTIFICADOR ":" (tp_primitivo | tp_matriz)
+	;
+
 %%
  
 void yyerror(const char* errmsg)
@@ -192,10 +240,3 @@ int main(int argc, char** argv)
 
      return 0;
 }
-/*int main(void) {
-
-	arq = fopen("Documentos/Compiladores/exemplo02/teste.txt","w");
-     yyparse();
-    fflush(arq);
-fclose(arq);
-}*/

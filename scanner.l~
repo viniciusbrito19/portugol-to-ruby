@@ -6,47 +6,25 @@ FILE *arq;
  
 /* Definições */
 
-
-
-NOME_VARIAVEL[a-z][a-z0-9]*
+DEC_LIT [0-9]+
+OCTAL_LIT '0' ('c'|'C') [0-8]+
+HEX_LIT '0' ('x'|'X') [0-9a-fA-F]+
+BIN_LIT '0' ('b'|'B') [01]+
+REAL_LIT {DEC_LIT}+("."{DEC_LIT})+
+INT_LIT {OCTAL_LIT} | {HEX_LIT} | {BIN_LIT} | {DEC_LIT}
+IDENTIFICADOR [a-z][a-z0-9]*
 WHITESPACE [ \n\r\t]+
-DIGITS [0-9]+
-RECEBER [:][=]
-ANY_CHAR .
-
-%option case-insensitive
  
-%% /* Regras */
+%%
  
 {WHITESPACE} /* Ignore */ ;
- 
-"ALGORITMO" { return T_ALGORITMO; }
-"IMPRIMA" { return T_IMPRIMA; }
-"VARIAVEIS" { return T_VARIAVEIS; }
-"FIM" { return T_FIM; }
-"SE" { return T_SE; }
-"ENTAO" { return T_ENTAO; }
-"SENAO" { return T_SENAO; }
-"PARA" { return T_PARA; }
-"FIM-VARIAVEIS" { return T_FIM_VARIAVEIS; }
-"FIM-SE" { return T_FIM_SE; }
+{IDENTIFICADOR} { return T_IDENTIFICADOR; }
+{REAL_LIT} { return T_REAL_LIT; }
+{INT_LIT} { return T_INT_LIT; }
 
-"INTEIRO" { return T_TIPO_INTEIRO; }
+%%
 
-"REAL" { return T_TIPO_REAL; }
-
-"LÓGICO" { return T_TIPO_LOGICO; }
-"LITERAL" { return T_TIPO_LITERAL; }
-"CARACTERE" { return T_TIPO_CARACTERE; }
-
-{NOME_VARIAVEL} { return T_NOME_VARIAVEL; }
-
-{DIGITS} { return T_DIGIT; }
-"," { return T_VIRGULA; }
-";" { return T_PONTO_VIRGULA; }
-{RECEBER} { return T_RECEBER; }
- 
-{ANY_CHAR} {
-	printf("Unexpected character in input: '%c' (ASCII=%d)\n", yytext[0], yytext[0]);
+yywrap () {
+return 0;
 }
 
