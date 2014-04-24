@@ -12,6 +12,8 @@ NOME_VARIAVEL[a-z][a-z0-9]*
 WHITESPACE [ \n\r\t]+
 DIGITS [0-9]+
 RECEBER [:]
+ABRIR_PARENTESES [(]
+FECHAR_PARENTESES [)]
 ANY_CHAR .
 
 %option case-insensitive
@@ -30,12 +32,9 @@ ANY_CHAR .
 "PARA" { return T_PARA; }
 "FIM-VARIAVEIS" { return T_FIM_VARIAVEIS; }
 "FIM-SE" { return T_FIM_SE; }
-
 "INTEIRO" { return T_TIPO_INTEIRO; }
-
 "REAL" { return T_TIPO_REAL; }
-
-"LÓGICO" { return T_TIPO_LOGICO; }
+"LOGICO" { return T_TIPO_LOGICO; }
 "LITERAL" { return T_TIPO_LITERAL; }
 "CARACTERE" { return T_TIPO_CARACTERE; }
 
@@ -45,7 +44,9 @@ ANY_CHAR .
 "," { return T_VIRGULA; }
 ";" { return T_PONTO_VIRGULA; }
 {RECEBER} { return T_RECEBER; }
- 
+{ABRIR_PARENTESES} [ return T_ABRIR_PARENTESES; ]
+{FECHAR_PARENTESES} [ return T_FECHAR_PARENTESES; ]
+
 {ANY_CHAR} {
 	printf("Unexpected character in input: '%c' (ASCII=%d)\n", yytext[0], yytext[0]);
 }

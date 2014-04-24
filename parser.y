@@ -10,8 +10,10 @@ FILE *arq;
 
 //%token T_STRING 
 %token T_ALGORITMO
+%token T_ABRIR_PARENTESES
 %token T_DIGIT
 %token T_ENTAO
+%token T_FECHAR_PARENTESES
 %token T_FIM
 %token T_FIM_SE
 %token T_FIM_VARIAVEIS
@@ -43,22 +45,23 @@ extern char* yytext;
 
 
 stmt:
-	Declaracao
+	stmt_declaracao
 ;
 
-Declara_Tipo:
-		Lista_Variaveis Tipo_Variavel
-;
 
-Declaracao:
-		Declara_Tipo
+stmt_declaracao:
 
-	|	T_VARIAVEIS Declaracao Declara_Tipo T_FIM_VARIAVEIS
+	T_VARIAVEIS Declara_Tipo T_FIM_VARIAVEIS
 {
 arq = fopen("teste.rb","a");
 fprintf(arq,"def \n %s \n end", str1);
 fclose(arq);
 }
+;
+
+Declara_Tipo:
+		Lista_Variaveis Tipo_Variavel
+	|	Lista_Variaveis Tipo_Variavel Declara_Tipo
 ;
 
 Lista_Variaveis:
@@ -80,18 +83,29 @@ Variavel:
 ;
  
 Tipo_Variavel:
-	T_RECEBER T_TIPO_INTEIRO T_PONTO_VIRGULA
+		T_RECEBER T_TIPO_INTEIRO T_PONTO_VIRGULA
 
-	| T_RECEBER T_TIPO_CARACTERE T_PONTO_VIRGULA
+	| 	T_RECEBER T_TIPO_CARACTERE T_PONTO_VIRGULA
 
-	| T_RECEBER T_TIPO_REAL T_PONTO_VIRGULA
+	| 	T_RECEBER T_TIPO_REAL T_PONTO_VIRGULA
 
-	| T_RECEBER T_TIPO_LOGICO T_PONTO_VIRGULA
+	| 	T_RECEBER T_TIPO_LOGICO T_PONTO_VIRGULA
 
-	| T_RECEBER T_TIPO_LITERAL T_PONTO_VIRGULA
+	| 	T_RECEBER T_TIPO_LITERAL T_PONTO_VIRGULA
 ;
 
+
 /*
+Se:
+		T_SE
+{
+arq = fopen("teste.rb","a");
+fprintf(arq,"if \n");
+fclose(arq);
+}
+;
+
+
 Fim:
 		T_FIM
 {
@@ -100,6 +114,7 @@ fprintf(arq,"end");
 fclose(arq);
 }
 ;
+
 
 Fim_Se:
 		T_FIM_SE
@@ -134,16 +149,6 @@ Imprima:
 {
 arq = fopen("teste.rb","a");
 fprintf(arq,"puts \n");
-fclose(arq);
-//zeroChar(str1);
-}
-;
-
-Se:
-		T_SE
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"if \n");
 fclose(arq);
 //zeroChar(str1);
 }
