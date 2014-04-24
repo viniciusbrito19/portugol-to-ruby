@@ -44,8 +44,8 @@ ANY_CHAR .
 "," { return T_VIRGULA; }
 ";" { return T_PONTO_VIRGULA; }
 {RECEBER} { return T_RECEBER; }
-{ABRIR_PARENTESES} [ return T_ABRIR_PARENTESES; ]
-{FECHAR_PARENTESES} [ return T_FECHAR_PARENTESES; ]
+{ABRIR_PARENTESES} { return T_ABRIR_PARENTESES; }
+{FECHAR_PARENTESES} { return T_FECHAR_PARENTESES; }
 
 {ANY_CHAR} {
 	printf("Unexpected character in input: '%c' (ASCII=%d)\n", yytext[0], yytext[0]);
