@@ -7,14 +7,15 @@ FILE *arq;
 /* Definições */
 
 
-
-NOME_VARIAVEL[a-z][a-z0-9]*
+STRING[a-z][a-z0-9]*
+NOME_VARIAVEL{STRING}+
 WHITESPACE [ \n\r\t]+
 DIGITS [0-9]+
-RECEBER [:]
-ABRIR_PARENTESES [(]
-FECHAR_PARENTESES [)]
+RECEBER [:]?
+CONDICAO [<>]?
+
 ANY_CHAR .
+
 
 %option case-insensitive
  
@@ -38,14 +39,27 @@ ANY_CHAR .
 "LITERAL" { return T_TIPO_LITERAL; }
 "CARACTERE" { return T_TIPO_CARACTERE; }
 
-{NOME_VARIAVEL} { return T_NOME_VARIAVEL; }
-
-{DIGITS} { return T_DIGIT; }
 "," { return T_VIRGULA; }
 ";" { return T_PONTO_VIRGULA; }
+">=" { return T_MAIOR_IGUAL; }
+"<=" { return T_MENOR_IGUAL; }
+"e" { return T_AND; }
+"ou" { return T_OR; }
+"<>" { return T_DIFERENTE; }
+
+"+" { return T_SOMA; }
+"-" { return T_SUBTRACAO; }
+"=" { return T_IGUAL; }
+"*" { return T_MULTIPLICACAO; }
+"/" { return T_DIVISAO; }
+"(" { return T_ABRE_PARENTESES; }
+")" { return T_FECHA_PARENTESES; }
+
+{NOME_VARIAVEL} { return T_NOME_VARIAVEL; }
+{DIGITS} { return T_DIGIT; }
 {RECEBER} { return T_RECEBER; }
-{ABRIR_PARENTESES} { return T_ABRIR_PARENTESES; }
-{FECHAR_PARENTESES} { return T_FECHAR_PARENTESES; }
+{CONDICAO} { return T_CONDICAO; }
+
 
 {ANY_CHAR} {
 	printf("Unexpected character in input: '%c' (ASCII=%d)\n", yytext[0], yytext[0]);
