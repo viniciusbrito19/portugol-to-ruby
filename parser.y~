@@ -20,6 +20,7 @@ FILE *arq;
 %token T_AND2
 %token T_ATRIBUICAO
 %token T_CONDICAO
+%token T_DEC_LIT
 %token T_DIFERENTE
 %token T_DIGIT
 %token T_DIVISAO
@@ -148,7 +149,7 @@ stm_list:
 	printf("Nhe11");}
 	| fcall T_PONTO_VIRGULA{
 	printf("Nhe12");}
-	| stm_ret{
+	| stm_ret T_PONTO_VIRGULA{
 	printf("Nhe13");}
 	| stm_se{
 	printf("Nhe14");}
@@ -157,9 +158,9 @@ stm_list:
 	;
 
 stm_ret
-	: T_RETORNE T_PONTO_VIRGULA{
+	: T_RETORNE{
 	printf("Nhe15");} 
-	| T_RETORNE expr T_PONTO_VIRGULA{
+	| T_RETORNE expr{
 	printf("Nhe16");}
 	;
 
@@ -218,8 +219,12 @@ expr:
 	| expr T_DIVISAO expr
 	| expr T_MULTIPLICACAO expr
 	| expr T_PORCENTAGEM expr
+	| T_SOMA termo{
+	printf("Nhe21.1");}
+	| T_SUBTRACAO termo{
+	printf("Nhe21.2");}
 	| termo{
-	printf("Nhe21");}
+	printf("Nhe21.3");}
 	;
 
 termo
@@ -244,7 +249,8 @@ fargs
 	;
 
 literal
-	: T_INT_LIT
+	: T_DEC_LIT
+	| T_INT_LIT
 	| T_REAL_LIT
 	| T_STRING
 	;

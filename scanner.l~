@@ -67,6 +67,7 @@ WHITESPACE [ \n\r\t]+
 {IDENTIFICADOR} { return T_IDENTIFICADOR; }
 {REAL_LIT} { return T_REAL_LIT; }
 {INT_LIT} { return T_INT_LIT; }
+{DEC_LIT} {return T_DEC_LIT; }
 {RECEBER} { return T_RECEBER; }
 {STRING} { return T_STRING; }
 
