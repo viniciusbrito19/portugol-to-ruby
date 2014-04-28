@@ -8,109 +8,36 @@
 FILE *arq;
 %}
 
-//%token T_STRING 
-/*%token T_ALGORITMO
-%token T_DIGIT
-%token T_ENTAO
-%token T_FIM
-%token T_FIM_SE
-%token T_FIM_VARIAVEIS
-%token T_IMPRIMA
-%token T_NOME_VARIAVEL
-%token T_PARA
-%token T_PONTO_VIRGULA
-%token T_RECEBER
-%token T_SE
-%token T_SENAO
-%token T_TIPO_INTEIRO
-%token T_TIPO_CARACTERE
-%token T_TIPO_REAL
-%token T_TIPO_LOGICO
-%token T_TIPO_LITERAL
-%token T_VIRGULA
-%token T_VARIAVEIS*/
 %token T_IDENTIFICADOR
-//%token T_STRING_LIT
 %token T_INT_LIT
 %token T_REAL_LIT
-//%token T_CARAC_LIT
-//%token T_KW_VERDADEIRO
-//%token T_KW_FALSO
-//RT-AN66R(U)
-//RT-AC66
+
 %{
 char str1[1000];
 char buffer[1000];
 extern char* yytext;
 %}
 
-%error-verbose
+%start algoritmo
  
 %%
 
-/*stmt:
-	Declaracao
-;
-
-Declara_Tipo:
-		Lista_Variaveis Tipo_Variavel
-;
-
-Declaracao:
-		Declara_Tipo
-
-	|	T_VARIAVEIS Declaracao Declara_Tipo T_FIM_VARIAVEIS
-{
-arq = fopen("teste.rb","a");
-fprintf(arq,"def \n %s \n end", str1);
-fclose(arq);
-}
-;
-
-Lista_Variaveis:
-		Variavel
-{
-strcpy(buffer, yytext);
-strcat(str1, buffer);
-}
-	|	Lista_Variaveis T_VIRGULA Variavel 
-{
-strcpy(buffer, yytext);
-strcat(str1, buffer);
-}
-;
-
-Variavel:
-		T_NOME_VARIAVEL
-	|	'`' T_NOME_VARIAVEL '`'
-;
- 
-Tipo_Variavel:
-	T_RECEBER T_TIPO_INTEIRO T_PONTO_VIRGULA
-
-	| T_RECEBER T_TIPO_CARACTERE T_PONTO_VIRGULA
-
-	| T_RECEBER T_TIPO_REAL T_PONTO_VIRGULA
-
-	| T_RECEBER T_TIPO_LOGICO T_PONTO_VIRGULA
-
-	| T_RECEBER T_TIPO_LITERAL T_PONTO_VIRGULA
-;*/
-
 algoritmo
-	: declaracao_algoritmo (var_decl_block)? stm_block (func_decls)*
+	: declaracao_algoritmo {
+	printf("Nhe");}
 	;
 
 declaracao_algoritmo
-	: "algoritmo" T_IDENTIFICADOR ";"
+	: "algoritmo" T_IDENTIFICADOR ";" {
+	printf("Nhe");}
 	;
 
 var_decl_block
-	: "variáveis" (var_decl ";")+ "fim-variáveis"
+	: "variáveis" var_decl ";" "fim-variáveis"
 	;
 
 var_decl
-	: T_IDENTIFICADOR ("," T_IDENTIFICADOR)* ":" (tp_primitivo | tp_matriz)
+	: T_IDENTIFICADOR | "," T_IDENTIFICADOR ":" | tp_primitivo | tp_matriz var_decl
 	;
 
 tp_primitivo
@@ -122,7 +49,7 @@ tp_primitivo
 	;
 
 tp_matriz
-	: "matriz" ("[" T_INT_LIT "]")+ "de" tp_prim_pl
+	: "matriz" "[" T_INT_LIT "]" "de" tp_prim_pl
 	;
 
 tp_prim_pl
@@ -134,32 +61,35 @@ tp_prim_pl
 	;
 
 stm_block
-	: "início" (stm_list)* "fim"
+	: "início" stm_list "fim"
 	;
 
 stm_list
-	:stm_attr
+	:stm_attr stm_list
 	| fcall ";"
-	| stm_ret
-	| stm_se
-	| stm_enquanto
-	| stm_para
+	| stm_ret stm_list
+	| stm_se stm_list
+	| stm_enquanto stm_list
+	| stm_para stm_list
 	;
 
 stm_ret
-	: "retorne" expr? ";"
+	: "retorne" | expr ";"
 	;
 
 lvalue
-	: T_IDENTIFICADOR ("[" expr "]")*
+	: T_IDENTIFICADOR lexpr
 	;
+
+lexpr
+	:"[" expr "]" lexpr
 
 stm_attr
 	: lvalue ":=" expr ";"
 	;
 
 stm_se
-	: "se" expr "então" stm_list ("senão" stm_list)? "fim-se"
+	: "se" expr "então" stm_list | "senão" stm_list | "fim-se"
 	;
 
 stm_enquanto
@@ -167,24 +97,24 @@ stm_enquanto
 	;
 
 stm_para
-	: "para" lvalue "de" expr "até" expr passo? "faça" stm_list "fim-para"
+	: "para" lvalue "de" expr "até" expr | passo "faça" stm_list "fim-para"
 	;
 
 passo
-	: "passo" ("+"|"-")? T_INT_LIT
+	: "passo" | "+"|"-" T_INT_LIT
 	;
 
 expr
-	: expr ("ou"|"||") expr
-	| expr ("e"|"&&") expr
+	: expr "ou" | "||" expr
+	| expr "e" | "&&" expr
 	| expr "|" expr
 	| expr "^" expr
 	| expr "&" expr
-	| expr ("="|"<>") expr
-	| expr (">"|">="|"<"|"<=" expr
-	| expr ("+" | "-") expr
-	| expr ( "/"|"*"|"%") expr
-	| ("+"|"-"|"~"|"não")? termo
+	| expr "=" | "<>" | expr
+	| expr ">" | ">=" | "<" | "<=" expr
+	| expr "+" | "-" expr
+	| expr "/" | "*" | "%" expr
+	| "+" | "-" | "~" | "não" termo
 	;
 
 termo
@@ -195,34 +125,16 @@ termo
 	;
 
 fcall
-	: T_IDENTIFICADOR "(" fargs? ")"
+	: T_IDENTIFICADOR "(" |fargs ")"
 	;
 
 fargs
-	: expr ("," expr)*
+	: expr "," expr
 	;
 
 literal
 	: T_INT_LIT
 	| T_REAL_LIT
-	;
-
-func_decls
-	: "função" T_IDENTIFICADOR "(" fparams? ")" (":" tb_primitivo)?
-		fvar_decl
-		stm_block
-	;
-
-fvar_decl
-	: (var_decl ";")*
-	;
-
-fparams
-	:fparam ("," fparam)*
-	;
-
-fparam
-	: T_IDENTIFICADOR ":" (tp_primitivo | tp_matriz)
 	;
 
 %%
@@ -231,8 +143,6 @@ void yyerror(const char* errmsg)
 {
 	printf("\n*** Erro: %s\n", errmsg);
 }
- 
-int yywrap(void) { return 1; }
  
 int main(int argc, char** argv)
 {
