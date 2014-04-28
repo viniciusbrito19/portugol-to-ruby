@@ -16,16 +16,59 @@ LETRA [A-Za-záÉçãêü\)\(@\{\}/]+
 ASPAS [\“\”\’\']+
 ESPACO [" "]
 PONTUACAO [–.:,-\<=\\>\>\\n\#]+
-String {LETRA}|{DIGITOS}|{PONTUACAO}|{ESPACO}|{ASPAS}
+STRING {LETRA}|{DIGITOS}|{PONTUACAO}|{ESPACO}|{ASPAS}
+RECEBER [:]?
 WHITESPACE [ \n\r\t]+
  
 %%
- 
 {WHITESPACE} /* Ignore */ ;
+"ALGORITMO" { return T_ALGORITMO; }
+"IMPRIMA" { return T_IMPRIMA; }
+"VARIAVEIS" { return T_VARIAVEIS; }
+"INICIO" {return T_INICIO; }
+"FIM" { return T_FIM; }
+"SE" { return T_SE; }
+"ENTAO" { return T_ENTAO; }
+"SENAO" { return T_SENAO; }
+"PARA" { return T_PARA; }
+"FIM-VARIAVEIS" { return T_FIM_VARIAVEIS; }
+"FIM-SE" { return T_FIM_SE; }
+"INTEIRO" { return T_TIPO_INTEIRO; }
+"REAL" { return T_TIPO_REAL; }
+"LOGICO" { return T_TIPO_LOGICO; }
+"LITERAL" { return T_TIPO_LITERAL; }
+"CARACTERE" { return T_TIPO_CARACTERE; }
+"RETORNE" { return T_RETORNE; }
+
+"," { return T_VIRGULA; }
+";" { return T_PONTO_VIRGULA; }
+">=" { return T_MAIOR_IGUAL; }
+"<=" { return T_MENOR_IGUAL; }
+"<" { return T_MENOR; }
+">" { return T_MAIOR; }
+"e" { return T_AND; }
+"&&" { return T_AND2; }
+"ou" { return T_OR; }
+"||" { return T_OR2; }
+"<>" { return T_DIFERENTE; }
+":=" { return T_ATRIBUICAO; }
+"%" { return T_PORCENTAGEM; }
+
+"+" { return T_SOMA; }
+"-" { return T_SUBTRACAO; }
+"=" { return T_IGUAL; }
+"*" { return T_MULTIPLICACAO; }
+"/" { return T_DIVISAO; }
+"(" { return T_ABRE_PARENTESES; }
+")" { return T_FECHA_PARENTESES; }
+"[" { return T_ABRE_COLCHETES; }
+"]" { return T_FECHA_COLCHETES; }
+
 {IDENTIFICADOR} { return T_IDENTIFICADOR; }
 {REAL_LIT} { return T_REAL_LIT; }
 {INT_LIT} { return T_INT_LIT; }
-{String} { return String; }
+{RECEBER} { return T_RECEBER; }
+{STRING} { return T_STRING; }
 
 %%
 
