@@ -6,6 +6,7 @@ FILE *arq;
  
 /* Definições */
 
+<<<<<<< HEAD
 DEC_LIT [0-9]+
 REAL_LIT {DEC_LIT}+("."{DEC_LIT})+
 digit [0-9]
@@ -19,6 +20,18 @@ PONTUACAO [–.:,-\<=\\>\>\\n\#]+
 STRING {LETRA}|{DIGITOS}|{PONTUACAO}|{ESPACO}|{ASPAS}
 RECEBER [:]?
 WHITESPACE [ \n\r\t]+
+=======
+
+STRING[a-z][a-z0-9]*
+NOME_VARIAVEL{STRING}+
+WHITESPACE [ \n\r\t]+
+DIGITS [0-9]+
+RECEBER [:]?
+CONDICAO [<>]?
+
+ANY_CHAR .
+>>>>>>> master
+
 
 %option case-insensitive
 
@@ -50,6 +63,7 @@ WHITESPACE [ \n\r\t]+
 ";" { return T_PONTO_VIRGULA; }
 ">=" { return T_MAIOR_IGUAL; }
 "<=" { return T_MENOR_IGUAL; }
+<<<<<<< HEAD
 "<" { return T_MENOR; }
 ">" { return T_MAIOR; }
 "e" { return T_AND; }
@@ -59,6 +73,11 @@ WHITESPACE [ \n\r\t]+
 "<>" { return T_DIFERENTE; }
 ":=" { return T_ATRIBUICAO; }
 "%" { return T_PORCENTAGEM; }
+=======
+"e" { return T_AND; }
+"ou" { return T_OR; }
+"<>" { return T_DIFERENTE; }
+>>>>>>> master
 
 "+" { return T_SOMA; }
 "-" { return T_SUBTRACAO; }
@@ -67,6 +86,7 @@ WHITESPACE [ \n\r\t]+
 "/" { return T_DIVISAO; }
 "(" { return T_ABRE_PARENTESES; }
 ")" { return T_FECHA_PARENTESES; }
+<<<<<<< HEAD
 "[" { return T_ABRE_COLCHETES; }
 "]" { return T_FECHA_COLCHETES; }
 
@@ -81,5 +101,16 @@ WHITESPACE [ \n\r\t]+
 
 yywrap () {
 return 0;
+=======
+
+{NOME_VARIAVEL} { return T_NOME_VARIAVEL; }
+{DIGITS} { return T_DIGIT; }
+{RECEBER} { return T_RECEBER; }
+{CONDICAO} { return T_CONDICAO; }
+{CONDICAO_AND} { return T_AND; }
+
+{ANY_CHAR} {
+	printf("Unexpected character in input: '%c' (ASCII=%d)\n", yytext[0], yytext[0]);
+>>>>>>> master
 }
 

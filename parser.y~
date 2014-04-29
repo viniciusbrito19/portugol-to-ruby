@@ -68,7 +68,6 @@ FILE *arq;
 %left T_MULTIPLICACAO T_DIVISAO
 %left NEG
 
-
 %{
 char str1[1000];
 char buffer[1000];

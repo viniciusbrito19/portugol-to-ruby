@@ -20,6 +20,7 @@ STRING {LETRA}|{DIGITOS}|{PONTUACAO}|{ESPACO}|{ASPAS}
 RECEBER [:]?
 WHITESPACE [ \n\r\t]+
 
+
 %option case-insensitive
 
 %%
