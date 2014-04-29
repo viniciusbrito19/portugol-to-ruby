@@ -5,3 +5,8 @@ parser.c
 parser.o
 parser.h
 parser
+common.h~
+lista.c~
+parser.h~
+parser.y~
+scanner.l~
