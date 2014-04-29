@@ -19,7 +19,10 @@ PONTUACAO [–.:,-\<=\\>\>\\n\#]+
 STRING {LETRA}|{DIGITOS}|{PONTUACAO}|{ESPACO}|{ASPAS}
 RECEBER [:]?
 WHITESPACE [ \n\r\t]+
- 
+ANY_CHAR .
+
+%option case-insensitive
+
 %%
 {WHITESPACE} /* Ignore */ ;
 "ALGORITMO" { return T_ALGORITMO; }
@@ -70,6 +73,10 @@ WHITESPACE [ \n\r\t]+
 {DEC_LIT} {return T_DEC_LIT; }
 {RECEBER} { return T_RECEBER; }
 {STRING} { return T_STRING; }
+
+{ANY_CHAR} {
+	printf("Unexpected character in input: '%c' (ASCII=%d)\n", yytext[0], yytext[0]);
+}
 
 %%
 
