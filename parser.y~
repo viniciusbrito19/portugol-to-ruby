@@ -15,19 +15,25 @@ FILE *arq;
 %token T_ABRE_PARENTESES
 %token T_ABRE_COLCHETES 
 %token T_ALGORITMO
+%token T_ATE
 %token T_RETORNE
 %token T_AND
 %token T_AND2
 %token T_ATRIBUICAO
 %token T_CONDICAO
+%token T_DE
 %token T_DEC_LIT
 %token T_DIFERENTE
 %token T_DIGIT
 %token T_DIVISAO
+%token T_ENQUANTO
 %token T_ENTAO
+%token T_FACA
 %token T_FECHA_PARENTESES
 %token T_FECHA_COLCHETES
 %token T_FIM
+%token T_FIM_ENQUANTO
+%token T_FIM_PARA
 %token T_FIM_SE
 %token T_FIM_VARIAVEIS
 %token T_IGUAL
@@ -79,22 +85,22 @@ algoritmo:
 
 declaracao_algoritmo:
 	T_ALGORITMO T_IDENTIFICADOR T_PONTO_VIRGULA {
-	printf("Nhe1");}
+	printf("Algoritmo ");}
 	;
 
 var_decl_block:
 	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS
 	{
-	printf("Nhe2");}
+	printf("Variavel ");}
 	;
 
 declara_Tipo:
 	lista_Variaveis tipo_Variavel
 	{
-	printf("Nhe3");}
+	printf("DeclaraVariavel ");}
 	| lista_Variaveis tipo_Variavel declara_Tipo
 	{
-	printf("Nhe4");}
+	printf("Declara+Variavel ");}
 	;
 
 lista_Variaveis:
@@ -117,79 +123,69 @@ tipo_Variavel:
 
 tp_primitivo:
 	T_TIPO_INTEIRO
-	{
-	printf("Nhe7");}
 	| T_TIPO_REAL
-	{
-	printf("Nhe8");}
 	| T_TIPO_CARACTERE
 	| T_TIPO_LITERAL
 	| T_TIPO_LOGICO
 	;
 
-//tp_matriz
-//	: "matriz" "[" T_INT_LIT "]" "de" tp_prim_pl
-//	;
-
-//tp_prim_pl
-//	: "inteiros"
-//	| "reais"
-//	| "caracteres"
-//	| "literais"
-//	| "lógicos"
-//	;
-
 stm_block:
 	T_INICIO stm_list T_FIM{
-	printf("Nhe10");}
+	printf("bloco ");}
 	;
 
 stm_list:
 	stm_attr{
-	printf("Nhe11");}
+	printf("fatribuicao ");}
 	| fcall T_PONTO_VIRGULA{
-	printf("Nhe12");}
+	printf("ffcall ");}
 	| stm_ret T_PONTO_VIRGULA{
-	printf("Nhe13");}
+	printf("fretorne ");}
 	| stm_se{
-	printf("Nhe14");}
-	| stm_enquanto
-	| stm_para
+	printf("fse ");}
+	| stm_enquanto{
+	printf("fenquanto ");}
+	| stm_para{
+	printf("fpara ");}
 	;
 
 stm_ret
 	: T_RETORNE{
-	printf("Nhe15");} 
+	printf("retorne ");} 
 	| T_RETORNE expr{
-	printf("Nhe16");}
+	printf("retorne x ");}
 	;
 
 lvalue: 
 	T_IDENTIFICADOR{
-	printf("Nhe17");}
+	printf("value ");}
 	| T_IDENTIFICADOR T_ABRE_COLCHETES expr T_FECHA_COLCHETES{
-	printf("Nhe27");}
+	printf("valuecolchetes ");}
 	;
 
 
 stm_attr
 	: lvalue T_ATRIBUICAO expr T_PONTO_VIRGULA{
-	printf("Nhe18");}
+	printf("Atribuicao ");}
 	;
 
 stm_se
 	: T_SE expr T_ENTAO stm_list T_FIM_SE{
-	printf("Nhe19.2");}
+	printf("SE ");}
 	| T_SE expr T_ENTAO stm_list T_SENAO stm_list T_FIM_SE{
-	printf("Nhe19");}
+	printf("SESENAO ");}
 	;
 
 stm_enquanto
-	: "enquanto" expr "faça" stm_list "fim-enquanto"
+	: T_ENQUANTO expr T_FACA stm_list T_FIM_ENQUANTO{
+	printf("Enquanto ");}
 	;
 
 stm_para
-	: "para" lvalue "de" expr "até" expr | passo "faça" stm_list "fim-para"
+	: T_PARA lvalue T_DE expr T_ATE expr T_FACA stm_list T_FIM_PARA{
+	printf("Para ");}
+	| T_PARA lvalue T_DE expr T_ATE expr passo T_FACA stm_list T_FIM_PARA{
+	printf("ParaPasso ");}
 	;
 
 passo
@@ -207,35 +203,35 @@ expr:
 	| expr T_IGUAL expr
 	| expr T_DIFERENTE expr
 	| expr T_MAIOR expr{
-	printf("Nhe20");}
+	printf("> ");}
 	| expr T_MAIOR_IGUAL expr{
-	printf("Nhe20");}
+	printf(">= ");}
 	| expr T_MENOR expr{
-	printf("Nhe20");}
+	printf("< ");}
 	| expr T_MENOR_IGUAL expr{
-	printf("Nhe20");}
+	printf("<= ");}
 	| expr T_SOMA expr
 	| expr T_SUBTRACAO expr
 	| expr T_DIVISAO expr
 	| expr T_MULTIPLICACAO expr
 	| expr T_PORCENTAGEM expr
 	| T_SOMA termo{
-	printf("Nhe21.1");}
+	printf("+termo ");}
 	| T_SUBTRACAO termo{
-	printf("Nhe21.2");}
+	printf("-termo ");}
 	| termo{
-	printf("Nhe21.3");}
+	printf("termo ");}
 	;
 
 termo
 	:fcall{
-	printf("Nhe22");}
+	printf("fcall ");}
 	| lvalue{
-	printf("Nhe23");}
+	printf("lvalue ");}
 	| literal{
-	printf("Nhe24");}
+	printf("literal ");}
 	| T_ABRE_PARENTESES expr T_FECHA_PARENTESES{
-	printf("Nhe25");}
+	printf("(expr) ");}
 	;
 
 fcall

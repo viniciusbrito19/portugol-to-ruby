@@ -19,7 +19,6 @@ PONTUACAO [–.:,-\<=\\>\>\\n\#]+
 STRING {LETRA}|{DIGITOS}|{PONTUACAO}|{ESPACO}|{ASPAS}
 RECEBER [:]?
 WHITESPACE [ \n\r\t]+
-ANY_CHAR .
 
 %option case-insensitive
 
@@ -34,6 +33,10 @@ ANY_CHAR .
 "ENTAO" { return T_ENTAO; }
 "SENAO" { return T_SENAO; }
 "PARA" { return T_PARA; }
+"DE" { return T_DE; }
+"ATE" { return T_ATE; }
+"FACA" { return T_FACA; }
+"FIM-PARA" { return T_FIM_PARA; }
 "FIM-VARIAVEIS" { return T_FIM_VARIAVEIS; }
 "FIM-SE" { return T_FIM_SE; }
 "INTEIRO" { return T_TIPO_INTEIRO; }
@@ -73,10 +76,6 @@ ANY_CHAR .
 {DEC_LIT} {return T_DEC_LIT; }
 {RECEBER} { return T_RECEBER; }
 {STRING} { return T_STRING; }
-
-{ANY_CHAR} {
-	printf("Unexpected character in input: '%c' (ASCII=%d)\n", yytext[0], yytext[0]);
-}
 
 %%
 

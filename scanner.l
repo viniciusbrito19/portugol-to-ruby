@@ -32,7 +32,13 @@ WHITESPACE [ \n\r\t]+
 "SE" { return T_SE; }
 "ENTAO" { return T_ENTAO; }
 "SENAO" { return T_SENAO; }
+"ENQUANTO" { return T_ENQUANTO; }
+"FIM-ENQUANTO" { return T_FIM_ENQUANTO; }
 "PARA" { return T_PARA; }
+"DE" { return T_DE; }
+"ATE" { return T_ATE; }
+"FACA" { return T_FACA; }
+"FIM-PARA" { return T_FIM_PARA; }
 "FIM-VARIAVEIS" { return T_FIM_VARIAVEIS; }
 "FIM-SE" { return T_FIM_SE; }
 "INTEIRO" { return T_TIPO_INTEIRO; }
