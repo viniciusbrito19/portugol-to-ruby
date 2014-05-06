@@ -81,6 +81,7 @@ algoritmo:
 	| declaracao_variaveis
 	| corpo_programa
 	| declaracao_algoritmo declaracao_variaveis
+	| declaracao_algoritmo declaracao_variaveis corpo_programa
 	;
 
 declaracao_algoritmo:
@@ -115,14 +116,14 @@ lista_Variaveis:
 	{
 	printf("Nhe5");
 	strcpy(buffer, yytext);
-	fprintf(arq,"\ndef %s\n\t@%s\nend\n",buffer,buffer);
-	fprintf(arq,"\ndef %s=(_%s)\n\t@%s = _%s\nend\n",buffer,buffer,buffer,buffer);}
+	fprintf(arq,"\n\tdef %s\n\t\t@%s\n\tend\n",buffer,buffer);
+	fprintf(arq,"\n\tdef %s=(_%s)\n\t\t@%s = _%s\n\tend\n",buffer,buffer,buffer,buffer);}
 	| lista_Variaveis T_VIRGULA variavel 
 	{
 	printf("Nhe6");
 	strcpy(buffer, yytext);
-	fprintf(arq,"\ndef %s\n\t@%s\nend\n",buffer,buffer);
-	fprintf(arq,"\ndef %s=(_%s)\n\t@%s = _%s\nend\n",buffer,buffer,buffer,buffer);}
+	fprintf(arq,"\n\tdef %s\n\t\t@%s\n\tend\n",buffer,buffer);
+	fprintf(arq,"\n\tdef %s=(_%s)\n\t\t@%s = _%s\n\tend\n",buffer,buffer,buffer,buffer);}
 	;
 
 variavel:
@@ -150,8 +151,6 @@ corpo_programa:
 lista_funcionalidades:
 	atribuicao{
 	printf("fatribuicao ");}
-	| fcall T_PONTO_VIRGULA{
-	printf("ffcall ");}
 	| retorno T_PONTO_VIRGULA{
 	printf("fretorne ");}
 	| funcao_se{
@@ -236,25 +235,13 @@ expressao:
 	printf("termo ");}
 	;
 
-termo
-	:fcall{
-	printf("fcall ");}
-	| lvalue{
+termo:
+	lvalue{
 	printf("lvalue ");}
 	| literal{
 	printf("literal ");}
 	| T_ABRE_PARENTESES expressao T_FECHA_PARENTESES{
 	printf("(expressao) ");}
-	;
-
-fcall
-	: T_IDENTIFICADOR
-	| T_IDENTIFICADOR T_ABRE_PARENTESES fargs T_FECHA_PARENTESES
-	;
-
-fargs
-	: expressao
-	| fargs T_VIRGULA expressao
 	;
 
 literal
