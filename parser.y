@@ -78,9 +78,9 @@ char buffer[1000];
 
 algoritmo:
 	declaracao_algoritmo
-	| var_decl_block
-	| stm_block
-	| declaracao_algoritmo var_decl_block
+	| declaracao_variaveis
+	| corpo_programa
+	| declaracao_algoritmo declaracao_variaveis
 	;
 
 declaracao_algoritmo:
@@ -95,7 +95,7 @@ classe:
 	strcpy(buffer, yytext);}
 	;
 
-var_decl_block:
+declaracao_variaveis:
 	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS
 	{
 	printf("Variavel");}
@@ -131,10 +131,10 @@ variavel:
 	;
  
 tipo_Variavel:
-	T_RECEBER tp_primitivo T_PONTO_VIRGULA
+	T_RECEBER tipo_primitivo T_PONTO_VIRGULA
 	;
 
-tp_primitivo:
+tipo_primitivo:
 	T_TIPO_INTEIRO
 	| T_TIPO_REAL
 	| T_TIPO_CARACTERE
@@ -142,62 +142,62 @@ tp_primitivo:
 	| T_TIPO_LOGICO
 	;
 
-stm_block:
-	T_INICIO stm_list T_FIM{
+corpo_programa:
+	T_INICIO lista_funcionalidades T_FIM{
 	printf("bloco ");}
 	;
 
-stm_list:
-	stm_attr{
+lista_funcionalidades:
+	atribuicao{
 	printf("fatribuicao ");}
 	| fcall T_PONTO_VIRGULA{
 	printf("ffcall ");}
-	| stm_ret T_PONTO_VIRGULA{
+	| retorno T_PONTO_VIRGULA{
 	printf("fretorne ");}
-	| stm_se{
+	| funcao_se{
 	printf("fse ");}
-	| stm_enquanto{
+	| funcao_enquanto{
 	printf("fenquanto ");}
-	| stm_para{
+	| funcao_para{
 	printf("fpara ");}
 	;
 
-stm_ret
+retorno
 	: T_RETORNE{
 	printf("retorne ");} 
-	| T_RETORNE expr{
+	| T_RETORNE expressao{
 	printf("retorne x ");}
 	;
 
 lvalue: 
 	T_IDENTIFICADOR{
 	printf("value ");}
-	| T_IDENTIFICADOR T_ABRE_COLCHETES expr T_FECHA_COLCHETES{
+	| T_IDENTIFICADOR T_ABRE_COLCHETES expressao T_FECHA_COLCHETES{
 	printf("valuecolchetes ");}
 	;
 
 
-stm_attr
-	: lvalue T_ATRIBUICAO expr T_PONTO_VIRGULA{
+atribuicao
+	: lvalue T_ATRIBUICAO expressao T_PONTO_VIRGULA{
 	printf("Atribuicao ");}
 	;
 
-stm_se
-	: T_SE expr T_ENTAO stm_list T_FIM_SE{
+funcao_se
+	: T_SE expressao T_ENTAO lista_funcionalidades T_FIM_SE{
 	printf("SE ");}
-	| T_SE expr T_ENTAO stm_list T_SENAO stm_list T_FIM_SE{
+	| T_SE expressao T_ENTAO lista_funcionalidades T_SENAO lista_funcionalidades T_FIM_SE{
 	printf("SESENAO ");}
 	;
 
-stm_enquanto
-	: T_ENQUANTO expr T_FACA stm_list T_FIM_ENQUANTO{
+funcao_enquanto
+	: T_ENQUANTO expressao T_FACA lista_funcionalidades T_FIM_ENQUANTO{
 	printf("Enquanto ");}
 	;
 
-stm_para
-	: T_PARA lvalue T_DE expr T_ATE expr T_FACA stm_list T_FIM_PARA{
+funcao_para
+	: T_PARA lvalue T_DE expressao T_ATE expressao T_FACA lista_funcionalidades T_FIM_PARA{
 	printf("Para ");}
-	| T_PARA lvalue T_DE expr T_ATE expr passo T_FACA stm_list T_FIM_PARA{
+	| T_PARA lvalue T_DE expressao T_ATE expressao passo T_FACA lista_funcionalidades T_FIM_PARA{
 	printf("ParaPasso ");}
 	;
 
@@ -205,29 +205,29 @@ passo
 	: "passo" | "+"|"-" T_INT_LIT
 	;
 
-expr:
-	expr T_OR expr
-	| expr T_OR2 expr
-	| expr T_AND expr
-	| expr T_AND2 expr
-	//| expr "|" expr
-	//| expr "^" expr
-	//| expr "&" expr
-	| expr T_IGUAL expr
-	| expr T_DIFERENTE expr
-	| expr T_MAIOR expr{
+expressao:
+	expressao T_OR expressao
+	| expressao T_OR2 expressao
+	| expressao T_AND expressao
+	| expressao T_AND2 expressao
+	//| expressao "|" expressao
+	//| expressao "^" expressao
+	//| expressao "&" expressao
+	| expressao T_IGUAL expressao
+	| expressao T_DIFERENTE expressao
+	| expressao T_MAIOR expressao{
 	printf("> ");}
-	| expr T_MAIOR_IGUAL expr{
+	| expressao T_MAIOR_IGUAL expressao{
 	printf(">= ");}
-	| expr T_MENOR expr{
+	| expressao T_MENOR expressao{
 	printf("< ");}
-	| expr T_MENOR_IGUAL expr{
+	| expressao T_MENOR_IGUAL expressao{
 	printf("<= ");}
-	| expr T_SOMA expr
-	| expr T_SUBTRACAO expr
-	| expr T_DIVISAO expr
-	| expr T_MULTIPLICACAO expr
-	| expr T_PORCENTAGEM expr
+	| expressao T_SOMA expressao
+	| expressao T_SUBTRACAO expressao
+	| expressao T_DIVISAO expressao
+	| expressao T_MULTIPLICACAO expressao
+	| expressao T_PORCENTAGEM expressao
 	| T_SOMA termo{
 	printf("+termo ");}
 	| T_SUBTRACAO termo{
@@ -243,8 +243,8 @@ termo
 	printf("lvalue ");}
 	| literal{
 	printf("literal ");}
-	| T_ABRE_PARENTESES expr T_FECHA_PARENTESES{
-	printf("(expr) ");}
+	| T_ABRE_PARENTESES expressao T_FECHA_PARENTESES{
+	printf("(expressao) ");}
 	;
 
 fcall
@@ -253,8 +253,8 @@ fcall
 	;
 
 fargs
-	: expr
-	| fargs T_VIRGULA expr
+	: expressao
+	| fargs T_VIRGULA expressao
 	;
 
 literal
