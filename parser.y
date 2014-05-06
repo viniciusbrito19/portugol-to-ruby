@@ -69,9 +69,7 @@ FILE *arq;
 %left NEG
 
 %{
-char str1[1000];
 char buffer[1000];
-extern char* yytext;
 %}
 
 %start algoritmo
@@ -79,18 +77,28 @@ extern char* yytext;
 %%
 
 algoritmo:
-	declaracao_algoritmo | var_decl_block | stm_block
+	declaracao_algoritmo
+	| var_decl_block
+	| stm_block
+	| declaracao_algoritmo var_decl_block
 	;
 
 declaracao_algoritmo:
-	T_ALGORITMO T_IDENTIFICADOR T_PONTO_VIRGULA {
-	printf("Algoritmo ");}
+	T_ALGORITMO classe T_PONTO_VIRGULA {
+	printf("Algoritmo ");
+	fprintf(arq,"class %s\n",buffer);}
+	;
+
+classe:
+	T_IDENTIFICADOR{
+	printf("value ");
+	strcpy(buffer, yytext);}
 	;
 
 var_decl_block:
 	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS
 	{
-	printf("Variavel ");}
+	printf("Variavel");}
 	;
 
 declara_Tipo:
@@ -105,10 +113,16 @@ declara_Tipo:
 lista_Variaveis:
 	variavel
 	{
-	printf("Nhe5");}
+	printf("Nhe5");
+	strcpy(buffer, yytext);
+	fprintf(arq,"\ndef %s\n\t@%s\nend\n",buffer,buffer);
+	fprintf(arq,"\ndef %s=(_%s)\n\t@%s = _%s\nend\n",buffer,buffer,buffer,buffer);}
 	| lista_Variaveis T_VIRGULA variavel 
 	{
-	printf("Nhe6");}
+	printf("Nhe6");
+	strcpy(buffer, yytext);
+	fprintf(arq,"\ndef %s\n\t@%s\nend\n",buffer,buffer);
+	fprintf(arq,"\ndef %s=(_%s)\n\t@%s = _%s\nend\n",buffer,buffer,buffer,buffer);}
 	;
 
 variavel:
@@ -259,7 +273,13 @@ void yyerror(const char* errmsg)
  
 int main(int argc, char** argv)
 {
-     yyparse();
+    arq = fopen("Arquivos/saida.rb","w");
+    fflush(arq);
+    
+    yyparse();
+    
+    fprintf(arq,"\nend");
+    fclose(arq);
 
-     return 0;
+    return 0;
 }
