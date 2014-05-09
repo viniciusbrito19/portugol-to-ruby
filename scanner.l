@@ -19,7 +19,7 @@ PONTUACAO [–.:,-\<=\\>\>\\n\#]+
 STRING {LETRA}|{DIGITOS}|{PONTUACAO}|{ESPACO}|{ASPAS}
 RECEBER [:]?
 WHITESPACE [ \n\r\t]+
-
+PRINTAR \"{STRING}*\"
 
 %option case-insensitive
 
@@ -48,6 +48,7 @@ WHITESPACE [ \n\r\t]+
 "LITERAL" { return T_TIPO_LITERAL; }
 "CARACTERE" { return T_TIPO_CARACTERE; }
 "RETORNE" { return T_RETORNE; }
+"LEIA()" { return T_LEIA; }
 
 "," { return T_VIRGULA; }
 ";" { return T_PONTO_VIRGULA; }
@@ -68,8 +69,8 @@ WHITESPACE [ \n\r\t]+
 "=" { return T_IGUAL; }
 "*" { return T_MULTIPLICACAO; }
 "/" { return T_DIVISAO; }
-"(" { return T_ABRE_PARENTESES; }
-")" { return T_FECHA_PARENTESES; }
+"(" {return T_ABRE_PARENTESES; }
+")" {return T_FECHA_PARENTESES; }
 "[" { return T_ABRE_COLCHETES; }
 "]" { return T_FECHA_COLCHETES; }
 
@@ -79,6 +80,7 @@ WHITESPACE [ \n\r\t]+
 {DEC_LIT} {return T_DEC_LIT; }
 {RECEBER} { return T_RECEBER; }
 {STRING} { return T_STRING; }
+{PRINTAR} { return T_PRINTAR; }
 
 %%
 
