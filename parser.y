@@ -62,7 +62,8 @@ FILE *arq;
 %token T_TIPO_LITERAL
 %token T_VIRGULA
 %token T_VARIAVEIS
-
+%token T_PRINTAR
+%token T_LEIA
 
 %left T_SOMA T_SUBTRACAO
 %left T_MULTIPLICACAO T_DIVISAO
@@ -78,10 +79,12 @@ char buffer[1000];
 
 algoritmo:
 	declaracao_algoritmo
-	| declaracao_variaveis
-	| corpo_programa
-	| declaracao_algoritmo declaracao_variaveis
-	| declaracao_algoritmo declaracao_variaveis corpo_programa
+	//| declaracao_variaveis
+	//| corpo_programa
+	//| declaracao_algoritmo declaracao_variaveis
+	//| declaracao_algoritmo declaracao_variaveis corpo_programa
+	|funcao_imprima
+	|funcao_leia
 	;
 
 declaracao_algoritmo:
@@ -159,6 +162,8 @@ lista_funcionalidades:
 	printf("fenquanto ");}
 	| funcao_para{
 	printf("fpara ");}
+	| funcao_imprima{
+	printf("fimprima ");}
 	;
 
 retorno
@@ -199,11 +204,27 @@ funcao_para
 	| T_PARA lvalue T_DE expressao T_ATE expressao passo T_FACA lista_funcionalidades T_FIM_PARA{
 	printf("ParaPasso ");}
 	;
-
 passo
 	: "passo" | "+"|"-" T_INT_LIT
 	;
 
+funcao_imprima
+	:T_IMPRIMA printar T_PONTO_VIRGULA
+	{ printf("Primeira expressao");}
+;
+
+printar
+	: printar T_VIRGULA lista_Variaveis T_VIRGULA printar
+	| printar T_VIRGULA lista_Variaveis
+	| lista_Variaveis T_VIRGULA printar
+	| lista_Variaveis
+	| T_PRINTAR
+;
+
+funcao_leia
+	: variavel T_ATRIBUICAO T_LEIA T_PONTO_VIRGULA
+	{printf ("Funcao leia");}
+;
 expressao:
 	expressao T_OR expressao
 	| expressao T_OR2 expressao
