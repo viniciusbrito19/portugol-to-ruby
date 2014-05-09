@@ -90,7 +90,8 @@ algoritmo:
 declaracao_algoritmo:
 	T_ALGORITMO classe T_PONTO_VIRGULA {
 	printf("Algoritmo ");
-	fprintf(arq,"class %s\n",buffer);}
+	fprintf(arq,"class %s\n",buffer);
+	strcpy(buffer,"");}
 	;
 
 classe:
@@ -102,7 +103,9 @@ classe:
 declaracao_variaveis:
 	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS
 	{
-	printf("Variavel");}
+	printf("Variavel");
+	buffer[(strlen(buffer)-1)]=0;
+	fprintf(arq,"\n\tattr_accessor %s",buffer);}
 	;
 
 declara_Tipo:
@@ -117,16 +120,16 @@ declara_Tipo:
 lista_Variaveis:
 	variavel
 	{
-	printf("Nhe5");
-	strcpy(buffer, yytext);
-	fprintf(arq,"\n\tdef %s\n\t\t@%s\n\tend\n",buffer,buffer);
-	fprintf(arq,"\n\tdef %s=(_%s)\n\t\t@%s = _%s\n\tend\n",buffer,buffer,buffer,buffer);}
+	printf("variavel ");
+	strcat(buffer, " :");
+	strcat(buffer, yytext);
+	strcat(buffer, ",");}
 	| lista_Variaveis T_VIRGULA variavel 
 	{
-	printf("Nhe6");
-	strcpy(buffer, yytext);
-	fprintf(arq,"\n\tdef %s\n\t\t@%s\n\tend\n",buffer,buffer);
-	fprintf(arq,"\n\tdef %s=(_%s)\n\t\t@%s = _%s\n\tend\n",buffer,buffer,buffer,buffer);}
+	printf("variavel ");
+	strcat(buffer, " :");	
+	strcat(buffer, yytext);
+	strcat(buffer, ",");}
 	;
 
 variavel:
