@@ -79,7 +79,6 @@ PRINTAR \"{STRING}*\"
 {INT_LIT} { return T_INT_LIT; }
 {DEC_LIT} {return T_DEC_LIT; }
 {RECEBER} { return T_RECEBER; }
-{STRING} { return T_STRING; }
 {PRINTAR} { return T_PRINTAR; }
 
 %%
