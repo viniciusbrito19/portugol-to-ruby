@@ -79,12 +79,10 @@ char buffer[1000];
 
 algoritmo:
 	declaracao_algoritmo
-	//| declaracao_variaveis
-	//| corpo_programa
-	//| declaracao_algoritmo declaracao_variaveis
-	//| declaracao_algoritmo declaracao_variaveis corpo_programa
-	|funcao_imprima
-	|funcao_leia
+	| declaracao_variaveis
+	| corpo_programa
+	| declaracao_algoritmo declaracao_variaveis
+	| declaracao_algoritmo declaracao_variaveis corpo_programa
 	;
 
 declaracao_algoritmo:
@@ -212,20 +210,20 @@ passo
 	;
 
 funcao_imprima
-	:T_IMPRIMA printar T_PONTO_VIRGULA
+	:T_IMPRIMA T_ABRE_PARENTESES printar T_FECHA_PARENTESES T_PONTO_VIRGULA
 	{ printf("Primeira expressao");}
 ;
 
 printar
-	: printar T_VIRGULA lista_Variaveis T_VIRGULA printar
-	| printar T_VIRGULA lista_Variaveis
-	| lista_Variaveis T_VIRGULA printar
-	| lista_Variaveis
-	| T_PRINTAR
+	: printar T_VIRGULA lista_Variaveis T_VIRGULA printar { printf("1");}
+	| printar T_VIRGULA lista_Variaveis { printf("2");}
+	| lista_Variaveis T_VIRGULA printar { printf("3");}
+	| lista_Variaveis { printf("4");}
+	| T_PRINTAR { printf("5");}
 ;
 
 funcao_leia
-	: variavel T_ATRIBUICAO T_LEIA T_PONTO_VIRGULA
+	: T_LEIA
 	{printf ("Funcao leia");}
 ;
 expressao:
@@ -264,6 +262,8 @@ termo:
 	printf("lvalue ");}
 	| literal{
 	printf("literal ");}
+	| funcao_leia{
+	printf("fleia ");}
 	| T_ABRE_PARENTESES expressao T_FECHA_PARENTESES{
 	printf("(expressao) ");}
 	;

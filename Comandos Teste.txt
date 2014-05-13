@@ -20,3 +20,11 @@ INICIO ENQUANTO x > 0 FACA PARA x DE fat ATE 1 FACA SE a>b ENTAO SE b>c ENTAO re
 
 ### Programa G-Portugol
 ALGORITMO pessoa; VARIAVEIS peso,altura:REAL; idade,rg:INTEIRO; FIM-VARIAVEIS INICIO ENQUANTO x > 0 FACA PARA x DE fat ATE 10 FACA SE a>b ENTAO SE b=c ENTAO retorne b; SENAO a:=b; FIM-SE FIM-SE FIM-PARA FIM-ENQUANTO FIM
+
+ALGORITMO pessoa; VARIAVEIS peso,altura:REAL; idade,rg:INTEIRO; FIM-VARIAVEIS INICIO ENQUANTO x > 0 FACA PARA x DE fat ATE 10 FACA SE a>b ENTAO SE b=c ENTAO retorne b; SENAO retorne a; FIM-SE FIM-SE FIM-PARA FIM-ENQUANTO FIM
+
+##Escreva
+ALGORITMO pessoa; VARIAVEIS peso,altura:REAL; idade,rg:INTEIRO; FIM-VARIAVEIS INICIO ENQUANTO x > 0 FACA PARA x DE fat ATE 10 FACA SE a>b ENTAO SE b=c ENTAO retorne b; SENAO SE b>c ENTAO imprima("Resultado x: ",x,"Resultado y: ",x); SENAO a:=b; FIM-SE FIM-SE SENAO a:=b; FIM-SE FIM-PARA FIM-ENQUANTO FIM
+
+##Leia Escreva
+ALGORITMO pessoa; VARIAVEIS peso,altura:REAL; idade,rg:INTEIRO; FIM-VARIAVEIS INICIO ENQUANTO x > 0 FACA PARA x DE fat ATE 10 FACA SE a>b ENTAO SE b=c ENTAO retorne b; SENAO SE b>c ENTAO imprima("Resultado x: ",x,"Resultado y: ",x); SENAO a:=leia(); FIM-SE FIM-SE SENAO a:=b; FIM-SE FIM-PARA FIM-ENQUANTO FIM
