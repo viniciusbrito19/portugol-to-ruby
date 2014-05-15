@@ -1,62 +1,89 @@
 // Biblioteca para Tratamento da Lista da Tabela de Símbolos
+#include<stdio.h>
+#include<string.h>
 
 struct TS
 {
 	char *nome;
 	char *tipo;
 	char *valor;
-	bool escopo;
+	int escopo;
 	struct TS *Prox;
-	TS(){nome=NULL;tipo=NULL;valor=NULL;escopo=false;Prox=NULL}
 };
 
-bool Vazia(TS *pLista)
+int seVazia(struct TS *pLista)
 {
 	if(pLista==NULL)
-		return true;
+		return 1;
 	else
-		return false;
+		return 0;
 }
 
-TS *IHead(TS *pLista, char *n, char *t, char *v, bool e)
+struct TS *inclui(struct TS *pLista, char *n, char *t, char *v, int e)
 {
-	TS *pNovoNo;
-	pNovoNo = (TS*) malloc(sizeof(TS));
-	pNovoNo->nome = n;
+	char *nome = (char*) malloc(sizeof(n));
+	strcpy(nome,n);
+	struct TS *pNovoNo;
+	pNovoNo = (struct TS*) malloc(sizeof(struct TS));
+	pNovoNo->nome = nome;
 	pNovoNo->tipo = t;
 	pNovoNo->valor = v;
-	pNovoNo->escopo = e;
-	pNovoNo->Prox = pLista;
-	pLista = pNovoNo;
+	pNovoNo->escopo = e;	
+	if(seVazia(pLista)==1)
+	{
+		pNovoNo->Prox = pLista;
+		pLista = pNovoNo;
+	}
+	else
+	{
+		struct TS *pAux;
+		pNovoNo->Prox = NULL;
+		pAux = pLista;
+		while(pAux->Prox!=NULL)
+			pAux = pAux->Prox;
+		pAux->Prox = pNovoNo;
+	}
 	return pLista;
 }
 
-TS *IHeadNome(TS *pLista, char *n)
+struct TS *incluiNome(struct TS *pLista, char *n)
 {
-	TS *pNovoNo;
-	pNovoNo = (TS*) malloc(sizeof(TS));
+	struct TS *pNovoNo;
+	pNovoNo = (struct TS*) malloc(sizeof(struct TS));
 	pNovoNo->nome = n;
 	pNovoNo->tipo = NULL;
 	pNovoNo->valor = NULL;
-	pNovoNo->escopo = false;
-	pNovoNo->Prox = pLista;
-	pLista = pNovoNo;
+	pNovoNo->escopo = 0;	
+	if(seVazia(pLista)==1)
+	{
+		pNovoNo->Prox = pLista;
+		pLista = pNovoNo;
+	}
+	else
+	{
+		struct TS *pAux;
+		pNovoNo->Prox = NULL;
+		pAux = pLista;
+		while(pAux->Prox!=NULL)
+			pAux = pAux->Prox;
+		pAux->Prox = pNovoNo;	
+	}
 	return pLista;
 }
 
-TS *EHead(TS *pLista)
+struct TS *EHead(struct TS *pLista)
 {
-	TS *pAux;
+	struct TS *pAux;
 	pAux = pLista;
 	pLista = pAux->Prox;
 	free(pAux);
 	return pLista;
 }
 
-TS *ITail(TS *pLista, char *n, char *t, char *v, bool e)
+struct TS *ITail(struct TS *pLista, char *n, char *t, char *v, int e)
 {
-	TS *pNovoNo, *pAux;
-	pNovoNo = (TS*) malloc(sizeof(TS));
+	struct TS *pNovoNo, *pAux;
+	pNovoNo = (struct TS*) malloc(sizeof(struct TS));
 	pNovoNo->nome = n;
 	pNovoNo->tipo = t;
 	pNovoNo->valor = v;
@@ -69,14 +96,14 @@ TS *ITail(TS *pLista, char *n, char *t, char *v, bool e)
 	return pLista;
 }
 
-TS *ITailNome(TS *pLista, char *n, bool e)
+struct TS *ITailNome(struct TS *pLista, char *n, int e)
 {
-	TS *pNovoNo, *pAux;
-	pNovoNo = (TS*) malloc(sizeof(TS));
+	struct TS *pNovoNo, *pAux;
+	pNovoNo = (struct TS*) malloc(sizeof(struct TS));
 	pNovoNo->nome = n;
 	pNovoNo->tipo = NULL;
 	pNovoNo->valor = NULL;
-	pNovoNo->escopo = false;
+	pNovoNo->escopo = 0;
 	pNovoNo->Prox = NULL;
 	pAux = pLista;
 	while(pAux->Prox!=NULL)
@@ -85,9 +112,9 @@ TS *ITailNome(TS *pLista, char *n, bool e)
 	return pLista;
 }
 
-TS *ETail(TS *pLista)
+struct TS *ETail(struct TS *pLista)
 {
-	TS *pAux;
+	struct TS *pAux;
 	pAux = pLista;
 	while(pAux->Prox->Prox!=NULL)
 		pAux = pAux->Prox;
@@ -96,10 +123,10 @@ TS *ETail(TS *pLista)
 	return pLista;
 }
 
-TS *IBefNome(TS *pLista, char *ref, char *n, char *t, char *v, bool e)
+struct TS *IBefNome(struct TS *pLista, char *ref, char *n, char *t, char *v, int e)
 {
-	TS *pNovoNo, *pAux;
-	pNovoNo = (TS*) malloc(sizeof(TS));
+	struct TS *pNovoNo, *pAux;
+	pNovoNo = (struct TS*) malloc(sizeof(struct TS));
 	pNovoNo->nome = n;
 	pNovoNo->tipo = t;
 	pNovoNo->valor = v;
@@ -112,14 +139,14 @@ TS *IBefNome(TS *pLista, char *ref, char *n, char *t, char *v, bool e)
 	return pLista;
 }
 
-TS *IBefNomeNome(TS *pLista, char *ref, char *n)
+struct TS *IBefNomeNome(struct TS *pLista, char *ref, char *n)
 {
-	TS *pNovoNo, *pAux;
-	pNovoNo = (TS*) malloc(sizeof(TS));
+	struct TS *pNovoNo, *pAux;
+	pNovoNo = (struct TS*) malloc(sizeof(struct TS));
 	pNovoNo->nome = n;
 	pNovoNo->tipo = NULL;
 	pNovoNo->valor = NULL;
-	pNovoNo->escopo = false;
+	pNovoNo->escopo = 0;
 	pAux = pLista;
 	while(pAux->Prox->nome!= ref)
 		pAux = pAux->Prox;
@@ -128,9 +155,9 @@ TS *IBefNomeNome(TS *pLista, char *ref, char *n)
 	return pLista;
 }
 
-TS *ENoNome(TS *pLista, char *ref)
+struct TS *ENoNome(struct TS *pLista, char *ref)
 {
-	TS *pAnt, *pPost;
+	struct TS *pAnt, *pPost;
 	pAnt = pLista;
 	while(pAnt->Prox->nome!=ref)
 		pAnt = pAnt->Prox;
@@ -140,9 +167,9 @@ TS *ENoNome(TS *pLista, char *ref)
 	return pLista;
 }
 
-TS *MNomeNome (TS *pLista, char *ref, char *n)
+struct TS *MNomeNome (struct TS *pLista, char *ref, char *n)
 {
-	TS *pAux;
+	struct TS *pAux;
 	pAux = pLista;
 	while(pAux->nome!=ref)
 		pAux = pAux->Prox;
@@ -150,9 +177,9 @@ TS *MNomeNome (TS *pLista, char *ref, char *n)
 	return pLista;
 }
 
-TS *MNomeTipo (TS *pLista, char *ref, char *t)
+struct TS *MNomeTipo (struct TS *pLista, char *ref, char *t)
 {
-	TS *pAux;
+	struct TS *pAux;
 	pAux = pLista;
 	while(pAux->nome!=ref)
 		pAux = pAux->Prox;
@@ -160,9 +187,9 @@ TS *MNomeTipo (TS *pLista, char *ref, char *t)
 	return pLista;
 }
 
-TS *MNomeValor (TS *pLista, char *ref, char *v)
+struct TS *MNomeValor (struct TS *pLista, char *ref, char *v)
 {
-	TS *pAux;
+	struct TS *pAux;
 	pAux = pLista;
 	while(pAux->nome!=ref)
 		pAux = pAux->Prox;
@@ -170,12 +197,50 @@ TS *MNomeValor (TS *pLista, char *ref, char *v)
 	return pLista;
 }
 
-TS *MNomeEscopo (TS *pLista, char *ref, bool e)
+struct TS *MNomeEscopo (struct TS *pLista, char *ref, int e)
 {
-	TS *pAux;
+	struct TS *pAux;
 	pAux = pLista;
 	while(pAux->nome!=ref)
 		pAux = pAux->Prox;
 	pAux->escopo = e;
 	return pLista;
+}
+
+struct TS* *modificaTipo (struct TS *pLista, char *ref, int min, int max)
+{
+	int i;
+	struct TS *pAux;
+	pAux = pLista;
+	for(i=0;i<=max;i++)
+	{
+		if(i<min)
+			pAux = pAux->Prox;
+		else
+		{
+			pAux->tipo = ref;
+			pAux = pAux->Prox;
+		}
+	}
+}
+
+void listar(struct TS *pLista)
+{
+	if(seVazia(pLista)==1)
+	{
+		printf("Lista Vazia!");
+	}
+	else
+	{
+	int id=1;
+	struct TS *pAux;	
+	pAux = pLista;
+	
+	do
+	{
+		printf("\n%d %s \t %s \t %s \t %d\n", id, pAux->nome, pAux->tipo, pAux->valor, pAux->escopo);
+		id++;
+		pAux = pAux->Prox;
+	}while(pAux->Prox!=NULL);
+	}
 }

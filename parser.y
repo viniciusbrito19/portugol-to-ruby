@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "funcao.c"
+#include "tslib.h"
 FILE *arq;
 %}
 
@@ -71,6 +72,8 @@ FILE *arq;
 
 %{
 char buffer[1000];
+char *valorTabSimb;
+struct TS *tabSimb = NULL;
 %}
 
 %start algoritmo
@@ -103,7 +106,9 @@ declaracao_variaveis:
 	{
 	printf("Variavel");
 	buffer[(strlen(buffer)-1)]=0;
-	fprintf(arq,"\n\tattr_accessor %s",buffer);}
+	fprintf(arq,"\n\tattr_accessor %s",buffer);
+	listar(tabSimb);	
+	}
 	;
 
 declara_Tipo:
@@ -121,13 +126,23 @@ lista_Variaveis:
 	printf("variavel ");
 	strcat(buffer, " :");
 	strcat(buffer, yytext);
-	strcat(buffer, ",");}
+	strcat(buffer, ",");
+	free(valorTabSimb);
+	valorTabSimb = (char*) malloc (sizeof(yytext));
+	strcpy(valorTabSimb, yytext);
+	tabSimb = incluiNome(tabSimb, valorTabSimb);
+	}
 	| lista_Variaveis T_VIRGULA variavel 
 	{
 	printf("variavel ");
 	strcat(buffer, " :");	
 	strcat(buffer, yytext);
-	strcat(buffer, ",");}
+	strcat(buffer, ",");
+	free(valorTabSimb);
+	valorTabSimb = (char*) malloc (sizeof(yytext));	
+	strcpy(valorTabSimb, yytext);
+	tabSimb = incluiNome(tabSimb, valorTabSimb);
+	}
 	;
 
 variavel:
