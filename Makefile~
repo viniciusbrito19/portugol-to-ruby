@@ -2,6 +2,15 @@ CFLAGS=-g
 BISON=bison
 FLEX=flex
 
+portugolrb: scanner.l parser.y
+bison -d parser.y
+mv parser.tab.h parser.h
+mv parser.tab.c parser.c
+flex scanner.l
+mv lex.yy.c scanner.c
+g++ parser.c scanner.c -Wall -o portugolrb -lfl -lm
+
+
 parser: parser.o scanner.o
 	$(CC) -o parser scanner.o parser.o
  

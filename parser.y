@@ -3,8 +3,13 @@
 #include "parser.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 #include <string.h>
 #include "funcao.c"
+
+extern int yylex();
+extern int yyparse();
+extern FILE *yyin;
 FILE *arq;
 %}
 
@@ -215,11 +220,11 @@ funcao_imprima
 ;
 
 printar
-	: printar T_VIRGULA lista_Variaveis T_VIRGULA printar { printf("1");}
-	| printar T_VIRGULA lista_Variaveis { printf("2");}
-	| lista_Variaveis T_VIRGULA printar { printf("3");}
-	| lista_Variaveis { printf("4");}
-	| T_PRINTAR { printf("5");}
+	: printar T_VIRGULA lista_Variaveis T_VIRGULA printar { printf("ASDFGH1");}
+	| printar T_VIRGULA lista_Variaveis { printf("asdfgh2");}
+	| lista_Variaveis T_VIRGULA printar { printf("asdsfdgfhg3");}
+	| lista_Variaveis { printf("ASANNA");}
+	| T_PRINTAR { printf("PRINTAR");}
 ;
 
 funcao_leia
@@ -282,15 +287,36 @@ void yyerror(const char* errmsg)
 	printf("\n*** Erro: %s\n", errmsg);
 }
  
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
-    arq = fopen("Arquivos/saida.rb","w");
-    fflush(arq);
-    
+	string arqInput;
+	string arqOutput;
+
+if(argc == 1)
+arqInput = "entrada.prg";
+else
+arqInput = argv[1];
+
+// Arquivo:
+FILE *arquivo = fopen(arqInput.c_str(), "r");
+
+if(arquivo==NULL)
+{
+perror("Erro! Nao foi possivel abrir seu arquivo. \n");
+}
+
+if (!arquivo) {
+printf("Desculpe-nos!! Não conseguimos abrir o arquivo: %s! \n", arqInput.c_str());
+return -1;
+}
+
+//configurando para o flex ler ao invés do STDIN
+yyin = arquivo;
+
+do
+{
     yyparse();
-    
-    fprintf(arq,"\nend");
-    fclose(arq);
+}while (!feof(yyin));
 
     return 0;
 }
