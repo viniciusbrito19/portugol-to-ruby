@@ -135,7 +135,7 @@ lista_Variaveis:
 	| lista_Variaveis T_VIRGULA variavel 
 	{
 	printf("variavel ");
-	strcat(buffer, " :");	
+	strcat(buffer, " :");
 	strcat(buffer, yytext);
 	strcat(buffer, ",");
 	free(valorTabSimb);

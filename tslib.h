@@ -1,7 +1,8 @@
-// Biblioteca para Tratamento da Lista da Tabela de Símbolos
+// Biblioteca para Tratamento da Lista da Tabela de Simbolos
 #include<stdio.h>
 #include<string.h>
 
+// Struct
 struct TS
 {
 	char *nome;
@@ -11,6 +12,7 @@ struct TS
 	struct TS *Prox;
 };
 
+// Relacionamentos com a Lista
 int seVazia(struct TS *pLista)
 {
 	if(pLista==NULL)
@@ -19,16 +21,45 @@ int seVazia(struct TS *pLista)
 		return 0;
 }
 
+void listar(struct TS *pLista)
+{
+	if(seVazia(pLista)==1)
+	{
+		printf("Lista Vazia!");
+	}
+	else
+	{
+		int id=1;
+		struct TS *pAux;	
+		pAux = pLista;
+    	FILE *ts = fopen("Arquivos/ts.txt","w");
+    	fflush(ts);
+		while(pAux!=NULL)
+		{
+			fprintf(ts,"\n====%d====\n", id);
+			fprintf(ts,"| Nome: %s\n| Tipo: %s\n| Valor: %s\n| Escopo: %d\n",
+				pAux->nome, pAux->tipo, pAux->valor, pAux->escopo);
+			id++;
+			pAux = pAux->Prox;
+		}
+    	fclose(ts);		
+	}
+}
+
+// Inclusoes
 struct TS *inclui(struct TS *pLista, char *n, char *t, char *v, int e)
 {
+	struct TS *pNovoNo = (struct TS*) malloc(sizeof(struct TS));
 	char *nome = (char*) malloc(sizeof(n));
 	strcpy(nome,n);
-	struct TS *pNovoNo;
-	pNovoNo = (struct TS*) malloc(sizeof(struct TS));
+	char *tipo = (char*) malloc(sizeof(t));
+	strcpy(tipo,t);
+	char *valor = (char*) malloc(sizeof(v));
+	strcpy(valor,v);
 	pNovoNo->nome = nome;
-	pNovoNo->tipo = t;
-	pNovoNo->valor = v;
-	pNovoNo->escopo = e;	
+	pNovoNo->tipo = tipo;
+	pNovoNo->valor = valor;
+	pNovoNo->escopo = e;
 	if(seVazia(pLista)==1)
 	{
 		pNovoNo->Prox = pLista;
@@ -48,9 +79,10 @@ struct TS *inclui(struct TS *pLista, char *n, char *t, char *v, int e)
 
 struct TS *incluiNome(struct TS *pLista, char *n)
 {
-	struct TS *pNovoNo;
-	pNovoNo = (struct TS*) malloc(sizeof(struct TS));
-	pNovoNo->nome = n;
+	struct TS *pNovoNo = (struct TS*) malloc(sizeof(struct TS));
+	char *nome = (char*) malloc(sizeof(n));
+	strcpy(nome,n);
+	pNovoNo->nome = nome;
 	pNovoNo->tipo = NULL;
 	pNovoNo->valor = NULL;
 	pNovoNo->escopo = 0;	
@@ -71,7 +103,27 @@ struct TS *incluiNome(struct TS *pLista, char *n)
 	return pLista;
 }
 
-struct TS *EHead(struct TS *pLista)
+struct TS *geraTipos (struct TS *pLista, char *t, int min, int max)
+{
+	int i;
+	char *tipo = (char*) malloc(sizeof(t));
+	strcpy(tipo,t);
+	struct TS *pAux;
+	pAux = pLista;
+	for(i=0;i<=max;i++)
+	{
+		if(i<min)
+			pAux = pAux->Prox;
+		else
+		{
+			pAux->tipo = tipo;
+			pAux = pAux->Prox;
+		}
+	}
+}
+
+// Exclusoes
+struct TS *excluiHead(struct TS *pLista)
 {
 	struct TS *pAux;
 	pAux = pLista;
@@ -80,39 +132,7 @@ struct TS *EHead(struct TS *pLista)
 	return pLista;
 }
 
-struct TS *ITail(struct TS *pLista, char *n, char *t, char *v, int e)
-{
-	struct TS *pNovoNo, *pAux;
-	pNovoNo = (struct TS*) malloc(sizeof(struct TS));
-	pNovoNo->nome = n;
-	pNovoNo->tipo = t;
-	pNovoNo->valor = v;
-	pNovoNo->escopo = e;
-	pNovoNo->Prox = NULL;
-	pAux = pLista;
-	while(pAux->Prox!=NULL)
-		pAux = pAux->Prox;
-	pAux->Prox = pNovoNo;
-	return pLista;
-}
-
-struct TS *ITailNome(struct TS *pLista, char *n, int e)
-{
-	struct TS *pNovoNo, *pAux;
-	pNovoNo = (struct TS*) malloc(sizeof(struct TS));
-	pNovoNo->nome = n;
-	pNovoNo->tipo = NULL;
-	pNovoNo->valor = NULL;
-	pNovoNo->escopo = 0;
-	pNovoNo->Prox = NULL;
-	pAux = pLista;
-	while(pAux->Prox!=NULL)
-		pAux = pAux->Prox;
-	pAux->Prox = pNovoNo;
-	return pLista;
-}
-
-struct TS *ETail(struct TS *pLista)
+struct TS *excluiTail(struct TS *pLista)
 {
 	struct TS *pAux;
 	pAux = pLista;
@@ -123,39 +143,7 @@ struct TS *ETail(struct TS *pLista)
 	return pLista;
 }
 
-struct TS *IBefNome(struct TS *pLista, char *ref, char *n, char *t, char *v, int e)
-{
-	struct TS *pNovoNo, *pAux;
-	pNovoNo = (struct TS*) malloc(sizeof(struct TS));
-	pNovoNo->nome = n;
-	pNovoNo->tipo = t;
-	pNovoNo->valor = v;
-	pNovoNo->escopo = e;
-	pAux = pLista;
-	while(pAux->Prox->nome!= ref)
-		pAux = pAux->Prox;
-	pNovoNo->Prox = pAux->Prox;
-	pAux->Prox = pNovoNo;
-	return pLista;
-}
-
-struct TS *IBefNomeNome(struct TS *pLista, char *ref, char *n)
-{
-	struct TS *pNovoNo, *pAux;
-	pNovoNo = (struct TS*) malloc(sizeof(struct TS));
-	pNovoNo->nome = n;
-	pNovoNo->tipo = NULL;
-	pNovoNo->valor = NULL;
-	pNovoNo->escopo = 0;
-	pAux = pLista;
-	while(pAux->Prox->nome!= ref)
-		pAux = pAux->Prox;
-	pNovoNo->Prox = pAux->Prox;
-	pAux->Prox = pNovoNo;
-	return pLista;
-}
-
-struct TS *ENoNome(struct TS *pLista, char *ref)
+struct TS *excluiNome(struct TS *pLista, char *ref)
 {
 	struct TS *pAnt, *pPost;
 	pAnt = pLista;
@@ -165,82 +153,4 @@ struct TS *ENoNome(struct TS *pLista, char *ref)
 	free(pAnt->Prox);
 	pAnt->Prox=pPost;
 	return pLista;
-}
-
-struct TS *MNomeNome (struct TS *pLista, char *ref, char *n)
-{
-	struct TS *pAux;
-	pAux = pLista;
-	while(pAux->nome!=ref)
-		pAux = pAux->Prox;
-	pAux->nome = n;
-	return pLista;
-}
-
-struct TS *MNomeTipo (struct TS *pLista, char *ref, char *t)
-{
-	struct TS *pAux;
-	pAux = pLista;
-	while(pAux->nome!=ref)
-		pAux = pAux->Prox;
-	pAux->tipo = t;
-	return pLista;
-}
-
-struct TS *MNomeValor (struct TS *pLista, char *ref, char *v)
-{
-	struct TS *pAux;
-	pAux = pLista;
-	while(pAux->nome!=ref)
-		pAux = pAux->Prox;
-	pAux->valor = v;
-	return pLista;
-}
-
-struct TS *MNomeEscopo (struct TS *pLista, char *ref, int e)
-{
-	struct TS *pAux;
-	pAux = pLista;
-	while(pAux->nome!=ref)
-		pAux = pAux->Prox;
-	pAux->escopo = e;
-	return pLista;
-}
-
-struct TS* *modificaTipo (struct TS *pLista, char *ref, int min, int max)
-{
-	int i;
-	struct TS *pAux;
-	pAux = pLista;
-	for(i=0;i<=max;i++)
-	{
-		if(i<min)
-			pAux = pAux->Prox;
-		else
-		{
-			pAux->tipo = ref;
-			pAux = pAux->Prox;
-		}
-	}
-}
-
-void listar(struct TS *pLista)
-{
-	if(seVazia(pLista)==1)
-	{
-		printf("Lista Vazia!");
-	}
-	else
-	{
-	int id=1;
-	struct TS *pAux;	
-	pAux = pLista;
-	
-	do
-	{
-		printf("\n%d %s \t %s \t %s \t %d\n", id, pAux->nome, pAux->tipo, pAux->valor, pAux->escopo);
-		id++;
-		pAux = pAux->Prox;
-	}while(pAux->Prox!=NULL);
-	}
 }

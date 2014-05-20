@@ -1,7 +1,7 @@
 CFLAGS=-g
 BISON=bison
 FLEX=flex
- 
+ARQ= Arquivos/
 parser: parser.o scanner.o
 	$(CC) -o parser scanner.o parser.o
  
@@ -12,4 +12,4 @@ scanner.c: scanner.l
 	$(FLEX) -oscanner.c scanner.l
  
 clean:
-	rm -f scanner.c scanner.o parser.c parser.o parser.h parser
+	rm -f scanner.c scanner.o parser.c parser.o parser.h parser $(ARQ)ts.txt $(ARQ)saida.rb $(ARQ)*~
