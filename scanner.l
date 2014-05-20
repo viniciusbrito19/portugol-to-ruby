@@ -3,8 +3,8 @@
 #include <string.h>
 #include "common.h"
 #include "parser.h"
+#include <stdlib.h>
 #define YY_DECL extern int yylex()
-FILE *arq;
 %}
  
 /* Definições */
@@ -27,69 +27,67 @@ PONTO_VIRGULA [;]*
 ABRE_PARENTESES [(]*
 FECHA_PARENTESES [)]*
 
-%option case-insensitive
+%option case-insensitive noyywrap
 
 %%
 {WHITESPACE} /* Ignore */ ;
-"ALGORITMO" { yylval.strval = strdup(yytext); return T_ALGORITMO; }
-"IMPRIMA" { yylval.strval = strdup(yytext); return T_IMPRIMA; }
-"VARIAVEIS" { yylval.strval = strdup(yytext); return T_VARIAVEIS; }
-"INICIO" { yylval.strval = strdup(yytext); return T_INICIO; }
-"FIM" { yylval.strval = strdup(yytext); return T_FIM; }
-"SE" { yylval.strval = strdup(yytext); return T_SE; }
-"ENTAO" { yylval.strval = strdup(yytext); return T_ENTAO; }
-"SENAO" { yylval.strval = strdup(yytext); return T_SENAO; }
-"ENQUANTO" { yylval.strval = strdup(yytext); return T_ENQUANTO; }
-"FIM-ENQUANTO" { yylval.strval = strdup(yytext); return T_FIM_ENQUANTO; }
-"PARA" { yylval.strval = strdup(yytext); return T_PARA; }
-"DE" { yylval.strval = strdup(yytext); return T_DE; }
-"ATE" { yylval.strval = strdup(yytext); return T_ATE; }
-"FACA" { yylval.strval = strdup(yytext); return T_FACA; }
-"FIM-PARA" { yylval.strval = strdup(yytext); return T_FIM_PARA; }
-"FIM-VARIAVEIS" { yylval.strval = strdup(yytext); return T_FIM_VARIAVEIS; }
-"FIM-SE" { yylval.strval = strdup(yytext); return T_FIM_SE; }
-"INTEIRO" { yylval.strval = strdup(yytext); return T_TIPO_INTEIRO; }
-"REAL" { yylval.strval = strdup(yytext); return T_TIPO_REAL; }
-"LOGICO" { yylval.strval = strdup(yytext); return T_TIPO_LOGICO; }
-"LITERAL" { yylval.strval = strdup(yytext); return T_TIPO_LITERAL; }
-"CARACTERE" { yylval.strval = strdup(yytext); return T_TIPO_CARACTERE; }
-"RETORNE" { yylval.strval = strdup(yytext); return T_RETORNE; }
-"LEIA()" { yylval.strval = strdup(yytext); return T_LEIA; }
+"ALGORITMO" { return T_ALGORITMO; }
+"IMPRIMA" { return T_IMPRIMA; }
+"VARIAVEIS" { return T_VARIAVEIS; }
+"INICIO" { return T_INICIO; }
+"FIM" { return T_FIM; }
+"SE" { return T_SE; }
+"ENTAO" { return T_ENTAO; }
+"SENAO" { return T_SENAO; }
+"ENQUANTO" { return T_ENQUANTO; }
+"FIM-ENQUANTO" { return T_FIM_ENQUANTO; }
+"PARA" { return T_PARA; }
+"DE" { return T_DE; }
+"ATE" { return T_ATE; }
+"FACA" { return T_FACA; }
+"FIM-PARA" { return T_FIM_PARA; }
+"FIM-VARIAVEIS" { return T_FIM_VARIAVEIS; }
+"FIM-SE" { return T_FIM_SE; }
+"INTEIRO" { return T_TIPO_INTEIRO; }
+"REAL" { return T_TIPO_REAL; }
+"LOGICO" { return T_TIPO_LOGICO; }
+"LITERAL" { return T_TIPO_LITERAL; }
+"CARACTERE" { return T_TIPO_CARACTERE; }
+"RETORNE" { return T_RETORNE; }
+"LEIA()" { return T_LEIA; }
 
-"," { yylval.strval = strdup(yytext); return T_VIRGULA; }
-{PONTO_VIRGULA} { yylval.strval = strdup(yytext); return T_PONTO_VIRGULA; }
-">=" { yylval.strval = strdup(yytext); return T_MAIOR_IGUAL; }
-"<=" { yylval.strval = strdup(yytext); return T_MENOR_IGUAL; }
-"<" { yylval.strval = strdup(yytext); return T_MENOR; }
-">" { yylval.strval = strdup(yytext); return T_MAIOR; }
-"e" { yylval.strval = strdup(yytext); return T_AND; }
-"&&" { yylval.strval = strdup(yytext); return T_AND2; }
-"ou" { yylval.strval = strdup(yytext); return T_OR; }
-"||" { yylval.strval = strdup(yytext); return T_OR2; }
-"<>" { yylval.strval = strdup(yytext); return T_DIFERENTE; }
-":=" { yylval.strval = strdup(yytext); return T_ATRIBUICAO; }
-"%" { yylval.strval = strdup(yytext); return T_PORCENTAGEM; }
+"," { return T_VIRGULA; }
+{PONTO_VIRGULA} { return T_PONTO_VIRGULA; }
+">=" { return T_MAIOR_IGUAL; }
+"<=" { return T_MENOR_IGUAL; }
+"<" { return T_MENOR; }
+">" { return T_MAIOR; }
+"e" { return T_AND; }
+"&&" { return T_AND2; }
+"ou" { return T_OR; }
+"||" { return T_OR2; }
+"<>" { return T_DIFERENTE; }
+":=" { return T_ATRIBUICAO; }
+"%" { return T_PORCENTAGEM; }
 
-"+" { yylval.strval = strdup(yytext); return T_SOMA; }
-"-" { yylval.strval = strdup(yytext); return T_SUBTRACAO; }
-"=" { yylval.strval = strdup(yytext); return T_IGUAL; }
-"*" { yylval.strval = strdup(yytext); return T_MULTIPLICACAO; }
-"/" { yylval.strval = strdup(yytext); return T_DIVISAO; }
-{ABRE_PARENTESES} { yylval.strval = strdup(yytext); return T_ABRE_PARENTESES; }
-{FECHA_PARENTESES} { yylval.strval = strdup(yytext); return T_FECHA_PARENTESES; }
-"[" { yylval.strval = strdup(yytext); return T_ABRE_COLCHETES; }
-"]" { yylval.strval = strdup(yytext); return T_FECHA_COLCHETES; }
+"+" { return T_SOMA; }
+"-" { return T_SUBTRACAO; }
+"=" { return T_IGUAL; }
+"*" { return T_MULTIPLICACAO; }
+"/" { return T_DIVISAO; }
+{ABRE_PARENTESES} { return T_ABRE_PARENTESES; }
+{FECHA_PARENTESES} { return T_FECHA_PARENTESES; }
+"[" { return T_ABRE_COLCHETES; }
+"]" { return T_FECHA_COLCHETES; }
 
-{IDENTIFICADOR} { yylval.strval = strdup(yytext); return T_IDENTIFICADOR; }
-{REAL_LIT} { yylval.strval = strdup(yytext); return T_REAL_LIT; }
-{INT_LIT} { yylval.strval = strdup(yytext); return T_INT_LIT; }
-{DEC_LIT} { yylval.strval = strdup(yytext); return T_DEC_LIT; }
-{RECEBER} { yylval.strval = strdup(yytext); return T_RECEBER; }
-{PRINTAR} { yylval.strval = strdup(yytext); return T_PRINTAR; }
+{IDENTIFICADOR} { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_IDENTIFICADOR; }
+{REAL_LIT} { return T_REAL_LIT; }
+{INT_LIT} { return T_INT_LIT; }
+{DEC_LIT} { return T_DEC_LIT; }
+{RECEBER} { return T_RECEBER; }
+{PRINTAR} { return T_PRINTAR; }
 
 %%
-
-yywrap () {
-return 0;
-}
-

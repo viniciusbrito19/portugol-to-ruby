@@ -1,16 +1,17 @@
 %{
 #include "common.h"
-#include "parser.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <string.h>
-#include "funcao.c"
+#include <iostream>
+
+using namespace std;
 
 extern int yylex();
 extern int yyparse();
 extern FILE *yyin;
-FILE *arq;
+void yyerror(const char *s);
 %}
 
 %token T_IDENTIFICADOR
@@ -92,47 +93,31 @@ algoritmo:
 
 declaracao_algoritmo:
 	T_ALGORITMO classe T_PONTO_VIRGULA {
-	printf("Algoritmo ");
-	fprintf(arq,"class %s\n",buffer);
-	strcpy(buffer,"");}
+	printf("class %s \n", $2);}
 	;
 
 classe:
-	T_IDENTIFICADOR{
-	printf("value ");
-	strcpy(buffer, yytext);}
+	T_IDENTIFICADOR
 	;
 
 declaracao_variaveis:
 	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS
 	{
-	printf("Variavel");
-	buffer[(strlen(buffer)-1)]=0;
-	fprintf(arq,"\n\tattr_accessor %s",buffer);}
+printf("\tattr_accessor :%s ",$3);
+}
 	;
 
 declara_Tipo:
 	lista_Variaveis tipo_Variavel
-	{
-	printf("DeclaraVariavel ");}
 	| lista_Variaveis tipo_Variavel declara_Tipo
-	{
-	printf("Declara+Variavel ");}
 	;
 
 lista_Variaveis:
 	variavel
-	{
-	printf("variavel ");
-	strcat(buffer, " :");
-	strcat(buffer, yytext);
-	strcat(buffer, ",");}
 	| lista_Variaveis T_VIRGULA variavel 
 	{
-	printf("variavel ");
-	strcat(buffer, " :");	
-	strcat(buffer, yytext);
-	strcat(buffer, ",");}
+	printf("");
+	}
 	;
 
 variavel:
@@ -158,25 +143,20 @@ corpo_programa:
 	;
 
 lista_funcionalidades:
-	atribuicao{
-	printf("fatribuicao ");}
+	atribuicao
 	| retorno T_PONTO_VIRGULA{
-	printf("fretorne ");}
-	| funcao_se{
-	printf("fse ");}
-	| funcao_enquanto{
-	printf("fenquanto ");}
-	| funcao_para{
-	printf("fpara ");}
-	| funcao_imprima{
-	printf("fimprima ");}
+	printf(";");}
+	| funcao_se
+	| funcao_enquanto
+	| funcao_para
+	| funcao_imprima
 	;
 
 retorno
 	: T_RETORNE{
-	printf("retorne ");} 
+	printf("return ");} 
 	| T_RETORNE expressao{
-	printf("retorne x ");}
+	printf("return ");}
 	;
 
 lvalue: 
@@ -255,7 +235,7 @@ expressao:
 	| expressao T_MULTIPLICACAO expressao
 	| expressao T_PORCENTAGEM expressao
 	| T_SOMA termo{
-	printf("+termo ");}
+	printf("+termo");}
 	| T_SUBTRACAO termo{
 	printf("-termo ");}
 	| termo{

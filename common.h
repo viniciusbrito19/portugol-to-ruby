@@ -1,10 +1,4 @@
-#ifndef __COMMON_H__
-#define __COMMON_H__
+#define YYSTYPE char*
 
-
-extern int yylex(); 
-extern int yyparse(); 
-extern void yyerror(const char* s);
 extern char* yytext;
- 
-#endif
+extern YYSTYPE yylval;

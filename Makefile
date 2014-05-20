@@ -1,15 +1,16 @@
-CFLAGS=-g
-BISON=bison
-FLEX=flex
+portugolrb: scanner.l parser.y
+	bison -d parser.y
+	mv parser.tab.h parser.h
+	mv parser.tab.c parser.c
+	flex scanner.l
+	mv lex.yy.c scanner.c
+	g++ parser.c scanner.c -Wall -o portugolrb -lfl -lm
 
-parser: parser.o scanner.o
-	$(CC) -o parser scanner.o parser.o
- 
-parser.c: parser.y
-	$(BISON) -d -oparser.c parser.y
- 
-scanner.c: scanner.l
-	$(FLEX) -oscanner.c scanner.l
- 
+create: portugolrb
+	./portugolrb entrada.prg >> saida.rb
+
+recreate: portugolrb
+	rm saida.rb
+	./portugolrb entrada.prg >> saida.rb
 clean:
-	rm -f scanner.c scanner.o parser.c parser.o parser.h parser
+	rm -f scanner.c parser.c parser.h portugolrb saida.rb

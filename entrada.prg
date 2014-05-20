@@ -1,0 +1,1 @@
+ALGORITMO pessoa; VARIAVEIS peso,altura:REAL; idade,rg:INTEIRO; FIM-VARIAVEIS
