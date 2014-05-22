@@ -1,2 +1,5 @@
-class pessoa 
-	attr_accessor :; 
+lvalue lvalue 
+return 
+return
+return 
+return

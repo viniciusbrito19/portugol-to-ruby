@@ -93,7 +93,8 @@ algoritmo:
 
 declaracao_algoritmo:
 	T_ALGORITMO classe T_PONTO_VIRGULA {
-	printf("class %s \n", $2);}
+	printf("class %s \n", $2);
+	}
 	;
 
 classe:
@@ -101,27 +102,39 @@ classe:
 	;
 
 declaracao_variaveis:
-	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS
-	{
-printf("\tattr_accessor :%s ",$3);
-}
+	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS {
+		printf("\tattr_accessor %s", $2);
+	}
 	;
 
 declara_Tipo:
-	lista_Variaveis tipo_Variavel
-	| lista_Variaveis tipo_Variavel declara_Tipo
+	lista_Variaveis tipo_Variavel{
+		$$ = $1;
+	}
+	| lista_Variaveis tipo_Variavel declara_Tipo {
+		char *tipovar = (char *) malloc (sizeof(char));
+		strcpy(tipovar, $1);
+		strcat(tipovar, ", ");
+		strcat(tipovar, $3);
+		$$ = tipovar;
+	}	
+
 	;
 
 lista_Variaveis:
 	variavel
-	| lista_Variaveis T_VIRGULA variavel 
-	{
-	printf("");
+	| lista_Variaveis T_VIRGULA variavel {
+		char *variavel = (char *) malloc (sizeof(char));
+		strcpy(variavel, ":");
+		strcat(variavel, $1);
+		strcat(variavel, ", :");
+		strcat(variavel, $3);
+		$$ = variavel;
 	}
 	;
 
 variavel:
-	T_IDENTIFICADOR
+	T_IDENTIFICADOR	
 	|'`' T_IDENTIFICADOR '`'
 	;
  
@@ -139,13 +152,18 @@ tipo_primitivo:
 
 corpo_programa:
 	T_INICIO lista_funcionalidades T_FIM{
-	printf("bloco ");}
+		char *corpo = (char *) malloc (sizeof(char));
+		strcpy(corpo, $2);
+		strcat(corpo, "\nend");
+		$$ = corpo;
+	}
 	;
 
 lista_funcionalidades:
 	atribuicao
 	| retorno T_PONTO_VIRGULA{
-	printf(";");}
+	printf("\nreturn");
+	}
 	| funcao_se
 	| funcao_enquanto
 	| funcao_para
@@ -154,29 +172,62 @@ lista_funcionalidades:
 
 retorno
 	: T_RETORNE{
-	printf("return ");} 
+	printf("\nreturn ");
+	} 
 	| T_RETORNE expressao{
-	printf("return ");}
+	printf("\nreturn %s", $2);
+	}
 	;
 
 lvalue: 
-	T_IDENTIFICADOR{
-	printf("value ");}
+	T_IDENTIFICADOR
 	| T_IDENTIFICADOR T_ABRE_COLCHETES expressao T_FECHA_COLCHETES{
-	printf("valuecolchetes ");}
+		char *valor = (char *) malloc (sizeof(char));
+		strcpy(valor, $1);
+		strcat(valor, $2);
+		strcat(valor, " ");
+		strcat(valor, $3);
+		strcat(valor, " ");
+		strcat(valor, $4);
+		$$ = valor;
+	}
 	;
 
 
 atribuicao
 	: lvalue T_ATRIBUICAO expressao T_PONTO_VIRGULA{
-	printf("Atribuicao ");}
+		char *atribuicao = (char *) malloc (sizeof(char));
+		strcpy(atribuicao, $1);
+		strcat(atribuicao, $2);
+		strcat(atribuicao, " ");
+		strcat(atribuicao, $3);
+		strcat(atribuicao, " ");
+		strcat(atribuicao, $4);
+		$$ = atribuicao;
+	}
 	;
 
 funcao_se
 	: T_SE expressao T_ENTAO lista_funcionalidades T_FIM_SE{
-	printf("SE ");}
+		char *funcaose = (char *) malloc (sizeof(char));
+		strcpy(funcaose, "\n\tif ");
+		strcat(funcaose, $2);
+		strcat(funcaose, "\n\t\t");
+		strcat(funcaose, $4);
+		strcat(funcaose, "\n\tend");
+		$$ = funcaose;}
 	| T_SE expressao T_ENTAO lista_funcionalidades T_SENAO lista_funcionalidades T_FIM_SE{
-	printf("SESENAO ");}
+		char *funcaose = (char *) malloc (sizeof(char));
+		strcpy(funcaose, "\n\tif ");
+		strcat(funcaose, $2);
+		strcat(funcaose, "\n\t\t");
+		strcat(funcaose, $4);
+		strcat(funcaose, "\n\telse");
+		strcat(funcaose, "\n\t\t");
+		strcat(funcaose, $6);
+		strcat(funcaose, "\n\tend");
+		$$ = funcaose;
+	}
 	;
 
 funcao_enquanto
@@ -221,25 +272,18 @@ expressao:
 	//| expressao "&" expressao
 	| expressao T_IGUAL expressao
 	| expressao T_DIFERENTE expressao
-	| expressao T_MAIOR expressao{
-	printf("> ");}
-	| expressao T_MAIOR_IGUAL expressao{
-	printf(">= ");}
-	| expressao T_MENOR expressao{
-	printf("< ");}
-	| expressao T_MENOR_IGUAL expressao{
-	printf("<= ");}
+	| expressao T_MAIOR expressao
+	| expressao T_MAIOR_IGUAL expressao
+	| expressao T_MENOR expressao
+	| expressao T_MENOR_IGUAL expressao
 	| expressao T_SOMA expressao
 	| expressao T_SUBTRACAO expressao
 	| expressao T_DIVISAO expressao
 	| expressao T_MULTIPLICACAO expressao
 	| expressao T_PORCENTAGEM expressao
-	| T_SOMA termo{
-	printf("+termo");}
-	| T_SUBTRACAO termo{
-	printf("-termo ");}
-	| termo{
-	printf("termo ");}
+	| T_SOMA termo
+	| T_SUBTRACAO termo
+	| termo
 	;
 
 termo:

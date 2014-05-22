@@ -56,18 +56,30 @@ FECHA_PARENTESES [)]*
 "RETORNE" { return T_RETORNE; }
 "LEIA()" { return T_LEIA; }
 
-"," { return T_VIRGULA; }
+"," { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_VIRGULA; }
 {PONTO_VIRGULA} { return T_PONTO_VIRGULA; }
 ">=" { return T_MAIOR_IGUAL; }
 "<=" { return T_MENOR_IGUAL; }
-"<" { return T_MENOR; }
-">" { return T_MAIOR; }
+"<" { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_MENOR; }
+">" { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_MAIOR; }
 "e" { return T_AND; }
 "&&" { return T_AND2; }
 "ou" { return T_OR; }
 "||" { return T_OR2; }
 "<>" { return T_DIFERENTE; }
-":=" { return T_ATRIBUICAO; }
+":=" { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_ATRIBUICAO; }
 "%" { return T_PORCENTAGEM; }
 
 "+" { return T_SOMA; }
@@ -77,17 +89,38 @@ FECHA_PARENTESES [)]*
 "/" { return T_DIVISAO; }
 {ABRE_PARENTESES} { return T_ABRE_PARENTESES; }
 {FECHA_PARENTESES} { return T_FECHA_PARENTESES; }
-"[" { return T_ABRE_COLCHETES; }
-"]" { return T_FECHA_COLCHETES; }
+"[" { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_ABRE_COLCHETES; }
+"]" { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_FECHA_COLCHETES; }
 
 {IDENTIFICADOR} { 
 	yylval = (char*) malloc( sizeof(char) ); 
 	strcpy(yylval, yytext);
 	return T_IDENTIFICADOR; }
-{REAL_LIT} { return T_REAL_LIT; }
-{INT_LIT} { return T_INT_LIT; }
-{DEC_LIT} { return T_DEC_LIT; }
-{RECEBER} { return T_RECEBER; }
-{PRINTAR} { return T_PRINTAR; }
+{REAL_LIT} { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_REAL_LIT; }
+{INT_LIT} { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_INT_LIT; }
+{DEC_LIT} { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_DEC_LIT; }
+{RECEBER} { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_RECEBER; }
+{PRINTAR} { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_PRINTAR; }
 
 %%

@@ -1,1 +1,1 @@
-ALGORITMO pessoa; VARIAVEIS peso,altura:REAL; idade,rg:INTEIRO; FIM-VARIAVEIS
+INICIO SE a>b ENTAO retorne; SENAO retorne; FIM-SE FIM
