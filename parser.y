@@ -92,13 +92,28 @@ algoritmo:
 	declaracao_algoritmo
 	| declaracao_variaveis
 	| corpo_programa
-	| declaracao_algoritmo declaracao_variaveis
-	| declaracao_algoritmo declaracao_variaveis corpo_programa
+	| declaracao_algoritmo declaracao_variaveis{
+		char *declaracao1 = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(declaracao1, $1);
+		strcat(declaracao1, $2);
+		$$ = declaracao1;
+	}
+	| declaracao_algoritmo declaracao_variaveis corpo_programa{
+		char *declaracao2 = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(declaracao2, $1);
+		strcat(declaracao2, $2);
+		strcat(declaracao2, $3);
+		$$ = declaracao2;
+	}
 	;
 
 declaracao_algoritmo:
 	T_ALGORITMO classe T_PONTO_VIRGULA {
-		printf("class %s \n", $2);
+		char *declara1 = (char *) malloc (strlen($2)+1);
+		strcpy(declara1, "class ");
+		strcat(declara1, $2);
+		strcat(declara1, " \n");
+		$$ = declara1;
 	}
 	;
 
@@ -107,8 +122,13 @@ classe:
 	;
 
 declaracao_variaveis:
-	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS {
-		printf("\tattr_accessor %s", $2);
+	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS 
+	{
+		char *declaraVar = (char *) malloc (strlen($2)+17);
+		strcpy(declaraVar, "attr_accessor ");
+		strcat(declaraVar, $2);
+		strcat(declaraVar, " \n");
+		$$ = declaraVar;
 	}
 	;
 
@@ -119,7 +139,7 @@ declara_Tipo:
 		$$ = tipovar1;
 	}
 	| lista_Variaveis tipo_Variavel declara_Tipo {
-		char *tipovar = (char *) malloc (strlen($1)+strlen($3)+1);
+		char *tipovar = (char *) malloc (strlen($1)+strlen($3)+3);
 		strcpy(tipovar, $1);
 		strcat(tipovar, ", ");
 		strcat(tipovar, $3);
@@ -130,14 +150,14 @@ declara_Tipo:
 
 lista_Variaveis:
 	lista_Variaveis T_VIRGULA variavel {
-		char *var = (char *) malloc (strlen($1)+strlen($3)+1);
+		char *var = (char *) malloc (strlen($1)+strlen($3)+4);
 		strcpy(var, $1);
 		strcat(var, ", :");
 		strcat(var, $3);
 		$$ = var;
 	}
 	| variavel {
-		char *var1 = (char *) malloc (strlen($1)+1);
+		char *var1 = (char *) malloc (strlen($1)+2);
 		strcpy(var1, ":");
 		strcat(var1, $1);
 		$$ = var1;
@@ -166,17 +186,36 @@ tipo_primitivo:
 	;
 
 corpo_programa:
-	T_INICIO lista_funcionalidades T_FIM{
-		char *corpo = (char *) malloc (strlen($2)+1);
+	T_INICIO corpo_lista T_FIM{
+		char *corpo = (char *) malloc (strlen($2)+4);
 		strcpy(corpo, $2);
 		strcat(corpo, "\nend");
 		$$ = corpo;
 	}
 	;
 
+corpo_lista:
+	corpo_lista lista_funcionalidades{
+		char *corpoLista1 = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(corpoLista1, $1);
+		strcat(corpoLista1, $2);
+		$$ = corpoLista1;
+	}
+	|lista_funcionalidades
+	{
+		char *corpoLista2 = (char *) malloc (strlen($1)+1);
+		strcpy(corpoLista2, $1);
+		$$ = corpoLista2;
+	}
+;
+
 lista_funcionalidades:
 	atribuicao
-	| retorno T_PONTO_VIRGULA
+	| retorno T_PONTO_VIRGULA{
+		char *retorne = (char *) malloc (strlen($1));
+		strcpy(retorne, $1);
+		$$ = retorne;
+	}
 	| funcao_se
 	| funcao_enquanto
 	| funcao_para
@@ -184,18 +223,24 @@ lista_funcionalidades:
 	;
 
 retorno: 
-	T_RETORNE expressao {
-		//printf("\nreturn %s",$2);
+	T_RETORNE expressao 
+	{
+		char *retorne1 = (char *) malloc (strlen($2)+8);
+		strcpy(retorne1, "return ");
+		strcat(retorne1, $2);
+		$$ = retorne1;
 	}
 	| T_RETORNE {
-		//printf("\nreturn ");
+		char *retorne2 = (char *) malloc (sizeof(char));
+		strcpy(retorne2, "return ");
+		$$ = retorne2;
 	}
 	;
 
 lvalue: 
 	T_IDENTIFICADOR
 	| T_IDENTIFICADOR T_ABRE_COLCHETES expressao T_FECHA_COLCHETES{
-		char *valor = (char *) malloc (sizeof(char));
+		char *valor = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+3);
 		strcpy(valor, $1);
 		strcat(valor, $2);
 		strcat(valor, " ");
@@ -209,7 +254,7 @@ lvalue:
 
 atribuicao:
 	lvalue T_ATRIBUICAO expressao T_PONTO_VIRGULA{
-		char *atribuicao = (char *) malloc (sizeof(char));
+		char *atribuicao = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+3);
 		strcpy(atribuicao, $1);
 		strcat(atribuicao, $2);
 		strcat(atribuicao, " ");
@@ -222,7 +267,7 @@ atribuicao:
 
 funcao_se: 
 	T_SE expressao T_ENTAO lista_funcionalidades T_SENAO lista_funcionalidades T_FIM_SE{		
-		char *funcaose = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+1);
+		char *funcaose = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+25);
 		strcpy(funcaose, "\n\tif ");
 		strcat(funcaose, $2);
 		strcat(funcaose, "\n\t\t");
@@ -235,7 +280,7 @@ funcao_se:
 		
 	}
 	| T_SE expressao T_ENTAO lista_funcionalidades T_FIM_SE{
-		char *funcaose1 = (char *) malloc (strlen($2)+strlen($4)+1);
+		char *funcaose1 = (char *) malloc (strlen($2)+strlen($4)+15);
 		strcpy(funcaose1, "\n\tif ");
 		strcat(funcaose1, $2);
 		strcat(funcaose1, "\n\t\t");
@@ -247,14 +292,37 @@ funcao_se:
 
 funcao_enquanto
 	: T_ENQUANTO expressao T_FACA lista_funcionalidades T_FIM_ENQUANTO{
-	printf("Enquanto ");}
+		char *enquanto = (char *) malloc (strlen($2)+strlen($4)+18);
+		strcpy(enquanto, "\n\twhile ");
+		strcat(enquanto, $2);
+		strcat(enquanto, "\n\t\t");
+		strcat(enquanto, $4);
+		strcat(enquanto, "\n\tend ");
+		$$ = enquanto;
+	}
 	;
 
 funcao_para
-	: T_PARA lvalue T_DE expressao T_ATE expressao T_FACA lista_funcionalidades T_FIM_PARA{
-	printf("Para ");}
-	| T_PARA lvalue T_DE expressao T_ATE expressao passo T_FACA lista_funcionalidades T_FIM_PARA{
-	printf("ParaPasso ");}
+	: T_PARA lvalue T_DE expressao T_ATE expressao T_FACA lista_funcionalidades T_FIM_PARA
+	{
+		char *para1 = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+strlen($8)+3);
+		strcpy(para1, "\n\tfor ");
+		strcat(para1, $2);
+		strcat(para1, "\n\t\t");
+		strcat(para1, $4);
+		strcat(para1, "\n\tend ");
+		$$ = para1;
+	}
+	| T_PARA lvalue T_DE expressao T_ATE expressao passo T_FACA lista_funcionalidades T_FIM_PARA
+	{
+		char *para2 = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+strlen($7)+strlen($9)+18);
+		strcpy(para2, "\n\tfor ");
+		strcat(para2, $2);
+		strcat(para2, "\n\t\t");
+		strcat(para2, $4);
+		strcat(para2, "\n\tend ");
+		$$ = para2;
+	}
 	;
 passo
 	: "passo" | "+"|"-" T_INT_LIT
@@ -301,7 +369,9 @@ printar:
 funcao_leia: 
 	T_LEIA
 	{
-	printf ("gets");
+		char *leia = (char *) malloc (sizeof(char));
+		strcpy(leia, "gets ");
+		$$ = leia;
 	}
 ;
 expressao:
@@ -485,6 +555,6 @@ do
 {
     yyparse();
 }while (!feof(yyin));
-
+//Liberar espaço de memória utilizado
     return 0;
 }
