@@ -16,13 +16,11 @@ INT_LIT {digit}+
 IDENTIFICADOR [a-zA-Z_][a-zA-Z0-9_]*
 DIGITOS [0-9]+
 LETRA [A-Za-záÉçãêü\)\(@\{\}/]+
-ASPAS [\“\”\’\']+
 ESPACO [" "]
 PONTUACAO [–.:,-\<=\\>\>\\n\#]+
-STRING {LETRA}|{DIGITOS}|{PONTUACAO}|{ESPACO}|{ASPAS}
 RECEBER [:]?
 WHITESPACE [ \n\r\t]+
-PRINTAR \"{STRING}*\"
+PRINTAR \"[a-zA-Z0-9].*\"
 PONTO_VIRGULA [;]*
 ABRE_PARENTESES [(]*
 FECHA_PARENTESES [)]*
@@ -56,13 +54,16 @@ FECHA_PARENTESES [)]*
 "RETORNE" { return T_RETORNE; }
 "LEIA()" { return T_LEIA; }
 
-"," { 
+"," { return T_VIRGULA; }
+{PONTO_VIRGULA} { return T_PONTO_VIRGULA; }
+">=" { 
 	yylval = (char*) malloc( sizeof(char) ); 
 	strcpy(yylval, yytext);
-	return T_VIRGULA; }
-{PONTO_VIRGULA} { return T_PONTO_VIRGULA; }
-">=" { return T_MAIOR_IGUAL; }
-"<=" { return T_MENOR_IGUAL; }
+	return T_MAIOR_IGUAL; }
+"<=" { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_MENOR_IGUAL; }
 "<" { 
 	yylval = (char*) malloc( sizeof(char) ); 
 	strcpy(yylval, yytext);
@@ -80,11 +81,23 @@ FECHA_PARENTESES [)]*
 	yylval = (char*) malloc( sizeof(char) ); 
 	strcpy(yylval, yytext);
 	return T_ATRIBUICAO; }
-"%" { return T_PORCENTAGEM; }
+"%" { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_PORCENTAGEM; }
 
-"+" { return T_SOMA; }
-"-" { return T_SUBTRACAO; }
-"=" { return T_IGUAL; }
+"+" { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_SOMA; }
+"-" { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_SUBTRACAO; }
+"=" { 
+	yylval = (char*) malloc( sizeof(char) ); 
+	strcpy(yylval, yytext);
+	return T_IGUAL; }
 "*" { return T_MULTIPLICACAO; }
 "/" { return T_DIVISAO; }
 {ABRE_PARENTESES} { return T_ABRE_PARENTESES; }

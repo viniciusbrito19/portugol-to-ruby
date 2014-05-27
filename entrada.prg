@@ -1,1 +1,1 @@
-INICIO SE a>b ENTAO retorne; SENAO retorne; FIM-SE FIM
+INICIO SE a>b ENTAO SE b>c ENTAO retorne b; SENAO retorne c; FIM-SE FIM-SE FIM

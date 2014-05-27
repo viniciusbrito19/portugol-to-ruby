@@ -1,1 +1,2 @@
-ALGORITMO pessoa; VARIAVEIS peso,altura:REAL; idade,rg:INTEIRO; FIM-VARIAVEIS
+ALGORITMO pessoa; VARIAVEIS peso,altura:REAL; idade,rg:INTEIRO; FIM-VARIAVEIS INICIO imprima("a");
+FIM
