@@ -70,6 +70,7 @@ void yyerror(const char *s);
 %token T_VARIAVEIS
 %token T_PRINTAR
 %token T_LEIA
+%token T_PASSO
 
 %left T_SOMA T_SUBTRACAO
 %left T_MULTIPLICACAO T_DIVISAO
@@ -135,12 +136,14 @@ declaracao_variaveis:
 declara_Tipo:
 	lista_Variaveis tipo_Variavel{
 		char *tipovar1 = (char *) malloc (strlen($1)+1);
-		strcpy(tipovar1, $1);
+		strcpy(tipovar1," :");
+		strcat(tipovar1, $1);
 		$$ = tipovar1;
 	}
 	| lista_Variaveis tipo_Variavel declara_Tipo {
 		char *tipovar = (char *) malloc (strlen($1)+strlen($3)+3);
-		strcpy(tipovar, $1);
+		strcpy(tipovar, " :");
+		strcat(tipovar, $1);
 		strcat(tipovar, ", ");
 		strcat(tipovar, $3);
 		$$ = tipovar;
@@ -158,7 +161,6 @@ lista_Variaveis:
 	}
 	| variavel {
 		char *var1 = (char *) malloc (strlen($1)+2);
-		strcpy(var1, ":");
 		strcat(var1, $1);
 		$$ = var1;
 	}
@@ -211,7 +213,8 @@ corpo_lista:
 
 lista_funcionalidades:
 	atribuicao
-	| retorno T_PONTO_VIRGULA{
+	| retorno T_PONTO_VIRGULA
+	{
 		char *retorne = (char *) malloc (strlen($1));
 		strcpy(retorne, $1);
 		$$ = retorne;
@@ -254,13 +257,12 @@ lvalue:
 
 atribuicao:
 	lvalue T_ATRIBUICAO expressao T_PONTO_VIRGULA{
-		char *atribuicao = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+3);
-		strcpy(atribuicao, $1);
-		strcat(atribuicao, $2);
-		strcat(atribuicao, " ");
+		char *atribuicao = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+5);
+		strcpy(atribuicao,"\n\t");
+		strcat(atribuicao, $1);
+		strcat(atribuicao, "=");
 		strcat(atribuicao, $3);
-		strcat(atribuicao, " ");
-		strcat(atribuicao, $4);
+		strcat(atribuicao, "\n");
 		$$ = atribuicao;
 	}
 	;
@@ -308,8 +310,10 @@ funcao_para
 		char *para1 = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+strlen($8)+3);
 		strcpy(para1, "\n\tfor ");
 		strcat(para1, $2);
-		strcat(para1, "\n\t\t");
+		strcat(para1, " in ");
 		strcat(para1, $4);
+		strcat(para1, "..");
+		strcat(para1, $6);
 		strcat(para1, "\n\tend ");
 		$$ = para1;
 	}
@@ -318,20 +322,40 @@ funcao_para
 		char *para2 = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+strlen($7)+strlen($9)+18);
 		strcpy(para2, "\n\tfor ");
 		strcat(para2, $2);
-		strcat(para2, "\n\t\t");
+		strcat(para2, " in ");
 		strcat(para2, $4);
+		strcat(para2, "..");
+		strcat(para2, $6);
+		strcat(para2, "\n\t\t");
+		strcat(para2, $2);
+		strcat(para2, $7);
 		strcat(para2, "\n\tend ");
 		$$ = para2;
 	}
 	;
 passo
-	: "passo" | "+"|"-" T_INT_LIT
+	: T_PASSO T_SUBTRACAO T_INT_LIT
+	{
+		char *passo = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(passo, $2);
+		strcat(passo, "=");
+		strcat(passo, $3);
+		$$ = passo;
+	}
+	|T_PASSO T_SOMA T_INT_LIT
+	{
+		char *passo = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(passo, $2);
+		strcat(passo, "=");
+		strcat(passo, $3);
+		$$ = passo;
+	}
 	;
 
 funcao_imprima:
 	T_IMPRIMA T_ABRE_PARENTESES printar T_FECHA_PARENTESES T_PONTO_VIRGULA
 	{ 
-		char *fprint = (char *) malloc (sizeof(char));
+		char *fprint = (char *) malloc (strlen($3)+8);
 		strcpy(fprint, "\n\tputs ");
 		strcat(fprint, $3 );
 		$$ = fprint;
@@ -340,30 +364,45 @@ funcao_imprima:
 
 printar: 
 	printar T_VIRGULA lista_Variaveis T_VIRGULA printar { 
-		char *print1 = (char *) malloc (sizeof(char));
-		strcpy(print1, $1);
-		strcat(print1, ", ");
+		char *print1 = (char *) malloc (strlen($1)+strlen($3)+strlen($5)+6);
+		strcpy(print1, "Aqui1 ");
+		strcat(print1, $1);
+		strcat(print1, "&2+ ");
 		strcat(print1, $3);
-		strcat(print1, ", ");
+		strcat(print1, "&3+ ");
 		strcat(print1, $5);
 		$$ = print1;
 	}
-	| printar T_VIRGULA lista_Variaveis { 
-		char *print2 = (char *) malloc (sizeof(char));
-		strcpy(print2, $1);
-		strcat(print2, ", ");
+	| printar T_VIRGULA lista_Variaveis  { 
+		char *print2 = (char *) malloc (strlen($1)+strlen($3)+3);
+		strcpy(print2,"Aqui2 ");
+		strcat(print2, $1);
+		strcat(print2, "&4+ ");
 		strcat(print2, $3);
 		$$ = print2;
 	}
 	| lista_Variaveis T_VIRGULA printar { 
-		char *print3 = (char *) malloc (sizeof(char));
-		strcpy(print3, $1);
-		strcat(print3, ", ");
+		char *print3 = (char *) malloc (strlen($1)+strlen($3)+3);
+		strcpy(print3, "Aqui3");
+		strcat(print3, $1);
+		strcat(print3, "&5+ ");
 		strcat(print3, $3);
 		$$ = print3;
 	}
 	| lista_Variaveis
+	{
+		char *print4 = (char *) malloc (strlen($1)+1);
+		strcpy(print4, "Aqui4");
+		strcat(print4, $1);
+		$$ = print4;
+	}
 	| T_PRINTAR
+	{
+		char *print5 = (char *) malloc (strlen($1)+1);
+		strcpy(print5, "Aqui5");
+		strcat(print5, $1);
+		$$ = print5;	
+	}
 ;
 
 funcao_leia: 

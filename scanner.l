@@ -53,6 +53,7 @@ FECHA_PARENTESES [)]*
 "CARACTERE" { return T_TIPO_CARACTERE; }
 "RETORNE" { return T_RETORNE; }
 "LEIA()" { return T_LEIA; }
+"PASSO" { return T_PASSO; }
 
 "," { return T_VIRGULA; }
 {PONTO_VIRGULA} { return T_PONTO_VIRGULA; }

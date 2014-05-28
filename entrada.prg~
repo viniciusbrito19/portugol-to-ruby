@@ -3,32 +3,7 @@ VARIAVEIS
 peso,altura:REAL; idade,rg:INTEIRO; 
 FIM-VARIAVEIS 
 INICIO
-
-SE a>b ENTAO 
-	
-	SE c>d ENTAO 
-		retorne True;
-	SENAO 
-		
-		ENQUANTO x>a FACA 
-			retorne a; 
-		FIM-ENQUANTO
-	FIM-SE
-FIM-SE
+	a:=leia();
+	imprima("Resultado x: ",x,"Resultado y: ", y);
  
-SE a>b ENTAO 
-	retorne a;
-	SENAO 
-	ENQUANTO x>a FACA 
-		retorne; 
-	FIM-ENQUANTO
-FIM-SE
-
-SE a>b ENTAO 
-	ENQUANTO x>a FACA 
-		retorne a; 
-	FIM-ENQUANTO
-	SENAO 
-		retorne x;
-FIM-SE
 FIM
