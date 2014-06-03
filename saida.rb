@@ -1,7 +1,19 @@
-class pessoa 
-attr_accessor  :peso, :altura,  :idade, :rg 
+class Fatorial 
+attr_accessor  :res, :fat, :x 
 
-	a=gets 
+def fatorial
+	puts "Digite um número:"
+	@fat=gets 
 
-	puts Aqui2 Aqui5"Re x: ",x,"Re y: "!&4+ y
+	@res=1
+	
+	for @x in 10..1
+		@x-=1
+
+	@res=@res*@x
+	end 
+	puts "Resultado é: #{res}\n"
 end
+end
+obj = Fatorial.new()
+obj.fatorial

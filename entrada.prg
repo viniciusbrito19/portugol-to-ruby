@@ -1,9 +1,13 @@
-ALGORITMO pessoa; 
+ALGORITMO Fatorial; 
 VARIAVEIS 
-peso,altura:REAL; idade,rg:INTEIRO; 
+res,fat,x:INTEIRO; 
 FIM-VARIAVEIS 
 INICIO
-	a:=leia();
-	imprima("Re x: ",x,"Re y: ", y);
- 
+	imprima("Digite um número:");
+	fat:=leia();
+	res := 1;
+	para x de fat ate 1 passo -1 faca
+		res := res*x;
+	fim-para	
+	imprima("Resultado é:",res);
 FIM

@@ -5,6 +5,7 @@
 #include <string>
 #include <string.h>
 #include <iostream>
+#include <ctype.h>
 
 using namespace std;
 
@@ -125,10 +126,10 @@ classe:
 declaracao_variaveis:
 	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS 
 	{
-		char *declaraVar = (char *) malloc (strlen($2)+17);
+		char *declaraVar = (char *) malloc (strlen($2)+27);
 		strcpy(declaraVar, "attr_accessor ");
 		strcat(declaraVar, $2);
-		strcat(declaraVar, " \n");
+		strcat(declaraVar, " \n\ndef fatorial");
 		$$ = declaraVar;
 	}
 	;
@@ -189,9 +190,10 @@ tipo_primitivo:
 
 corpo_programa:
 	T_INICIO corpo_lista T_FIM{
-		char *corpo = (char *) malloc (strlen($2)+4);
+		char *corpo = (char *) malloc (strlen($2)+40);
 		strcpy(corpo, $2);
-		strcat(corpo, "\nend");
+		strcat(corpo, "\nend\nend");
+		strcat(corpo, "\nobj = Fatorial.new()\nobj.fatorial");
 		$$ = corpo;
 	}
 	;
@@ -213,16 +215,41 @@ corpo_lista:
 
 lista_funcionalidades:
 	atribuicao
+	{
+		char *func = (char *) malloc (strlen($1));
+		strcat(func, $1);
+		$$ = func;
+	}
 	| retorno T_PONTO_VIRGULA
 	{
 		char *retorne = (char *) malloc (strlen($1));
-		strcpy(retorne, $1);
+		strcat(retorne, $1);
 		$$ = retorne;
 	}
 	| funcao_se
+	{
+		char *func2 = (char *) malloc (strlen($1));
+		strcat(func2, $1);
+		$$ = func2;
+	}
 	| funcao_enquanto
+	{
+		char *func3 = (char *) malloc (strlen($1));
+		strcat(func3, $1);
+		$$ = func3;
+	}
 	| funcao_para
+	{
+		char *func4 = (char *) malloc (strlen($1));
+		strcat(func4, $1);
+		$$ = func4;
+	}
 	| funcao_imprima
+	{
+		char *func5 = (char *) malloc (strlen($1));
+		strcat(func5, $1);
+		$$ = func5;
+	}
 	;
 
 retorno: 
@@ -256,9 +283,10 @@ lvalue:
 
 
 atribuicao:
-	lvalue T_ATRIBUICAO expressao T_PONTO_VIRGULA{
+	variavel T_ATRIBUICAO expressao T_PONTO_VIRGULA{
 		char *atribuicao = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+5);
 		strcpy(atribuicao,"\n\t");
+		strcat(atribuicao, "@");
 		strcat(atribuicao, $1);
 		strcat(atribuicao, "=");
 		strcat(atribuicao, $3);
@@ -307,28 +335,33 @@ funcao_enquanto
 funcao_para
 	: T_PARA lvalue T_DE expressao T_ATE expressao T_FACA lista_funcionalidades T_FIM_PARA
 	{
-		char *para1 = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+strlen($8)+3);
-		strcpy(para1, "\n\tfor ");
+		char *para1 = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+strlen($8)+8);
+		strcpy(para1, "\n\tfor @");
 		strcat(para1, $2);
-		strcat(para1, " in ");
+		strcat(para1, " in @");
 		strcat(para1, $4);
 		strcat(para1, "..");
 		strcat(para1, $6);
+		strcat(para1, "\n");
+		strcat(para1, $8);
 		strcat(para1, "\n\tend ");
 		$$ = para1;
 	}
 	| T_PARA lvalue T_DE expressao T_ATE expressao passo T_FACA lista_funcionalidades T_FIM_PARA
 	{
-		char *para2 = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+strlen($7)+strlen($9)+18);
-		strcpy(para2, "\n\tfor ");
+		char *para2 = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+strlen($7)+strlen($9)+25);
+		strcpy(para2, "\n\tfor @");
 		strcat(para2, $2);
-		strcat(para2, " in ");
+		strcat(para2, " in @");
 		strcat(para2, $4);
 		strcat(para2, "..");
 		strcat(para2, $6);
 		strcat(para2, "\n\t\t");
+		strcat(para2, "@");
 		strcat(para2, $2);
 		strcat(para2, $7);
+		strcat(para2, "\n");
+		strcat(para2, $9);
 		strcat(para2, "\n\tend ");
 		$$ = para2;
 	}
@@ -365,42 +398,39 @@ funcao_imprima:
 printar: 
 	printar T_VIRGULA lista_Variaveis T_VIRGULA printar { 
 		char *print1 = (char *) malloc (strlen($1)+strlen($3)+strlen($5)+6);
-		strcpy(print1, "Aqui1 ");
-		strcat(print1, $1);
-		strcat(print1, "&2+ ");
+		strcpy(print1, $1);
+		strcat(print1, "+@");
 		strcat(print1, $3);
-		strcat(print1, "&3+ ");
+		strcat(print1, "+");
 		strcat(print1, $5);
 		$$ = print1;
 	}
 	| printar T_VIRGULA lista_Variaveis  { 
 		char *print2 = (char *) malloc (strlen($1)+strlen($3)+3);
-		strcpy(print2,"Aqui2 ");
-		strcat(print2, $1);
-		strcat(print2, "&4+ ");
+		strcpy(print2, $1);
+		strcat(print2, "+@");
 		strcat(print2, $3);
 		$$ = print2;
 	}
 	| lista_Variaveis T_VIRGULA printar { 
 		char *print3 = (char *) malloc (strlen($1)+strlen($3)+3);
-		strcpy(print3, "Aqui3");
+		strcpy(print3, "@");
 		strcat(print3, $1);
-		strcat(print3, "&5+ ");
+		strcat(print3, "+");
 		strcat(print3, $3);
 		$$ = print3;
 	}
 	| lista_Variaveis
 	{
 		char *print4 = (char *) malloc (strlen($1)+1);
-		strcpy(print4, "Aqui4");
+		strcpy(print4, "@");
 		strcat(print4, $1);
 		$$ = print4;
 	}
 	| T_PRINTAR
 	{
 		char *print5 = (char *) malloc (strlen($1)+1);
-		strcpy(print5, "Aqui5");
-		strcat(print5, $1);
+		strcpy(print5, $1);
 		$$ = print5;	
 	}
 ;
@@ -510,8 +540,9 @@ expressao:
 	}
 	| expressao T_MULTIPLICACAO expressao {		
 		char *exp14 = (char *) malloc (sizeof(char));
-		strcpy(exp14, $1);
-		strcat(exp14, "*");
+		strcpy(exp14,"@");
+		strcat(exp14, $1);
+		strcat(exp14, "*@");
 		strcat(exp14, $3);
 		$$ = exp14;
 	}
