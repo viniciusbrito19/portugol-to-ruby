@@ -3,15 +3,16 @@ attr_accessor  :res, :fat, :x
 	
 	def fatorial
 		puts "Digite um número:"
-		@fat=gets 
+		@fat=gets
+		puts fat(@fat.to_i) 
 		
-		@res=1
-
-		for @x in @fat..1
-			@x-=1
-			@res = @res*@x
+	end
+	def fat(n)
+		if(n>1)
+			n * fat(n-1)
+		else
+			1
 		end
-		puts "Fatorial de ",@fat," é ",@res
 	end
 end
 

@@ -1,0 +1,13 @@
+ALGORITMO Fatorial; 
+VARIAVEIS 
+idade:INTEIRO; 
+FIM-VARIAVEIS 
+INICIO
+	imprima("Digite sua idade:");
+	idade:=leia();
+	se idade>18 entao
+		imprima("Você pode dirigir");	
+	senao
+		imprima("Você nao pode dirigir");
+	fim-se
+FIM

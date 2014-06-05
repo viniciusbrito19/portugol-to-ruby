@@ -1,19 +1,20 @@
 class Fatorial 
-attr_accessor  :res, :fat, :x 
+attr_accessor  :res, :fat, :x, :idade 
 
-def fatorial
+def main
 	puts "Digite um número:"
 	@fat=gets 
 
 	@res=1
-	
-	for @x in 10..1
-		@x-=1
+
+	for @x in 1..@fat.to_i
 
 	@res=@res*@x
+
 	end 
-	puts "Resultado é: #{res}\n"
+	puts "Resultado é:",@res
 end
 end
+
 obj = Fatorial.new()
-obj.fatorial
+obj.main
