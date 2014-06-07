@@ -7,10 +7,10 @@ portugolrb: scanner.l parser.y
 	g++ parser.c scanner.c -Wall -o portugolrb -lfl -lm
 
 create: portugolrb
-	./portugolrb entrada.prg >> saida.rb
+	./portugolrb entrada.gpt >> saida.rb
 
 recreate: portugolrb
 	rm saida.rb
-	./portugolrb entrada.prg >> saida.rb
+	./portugolrb entrada.gpt >> saida.rb
 clean:
 	rm -f scanner.c parser.c parser.h portugolrb saida.rb

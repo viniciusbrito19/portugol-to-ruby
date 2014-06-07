@@ -1,0 +1,15 @@
+algoritmo fatorial; 
+variáveis 
+res,fat,x:inteiro; 
+fim-variáveis 
+
+início
+	imprima("Digite um número:");
+	fat:=leia();
+	res := 1;
+	para x de 1 até fat faça
+		res := res*x;
+	fim-para
+
+	imprima("Fatorial de ",fat," é igual a ",res);
+fim
