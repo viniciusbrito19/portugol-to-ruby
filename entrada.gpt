@@ -1,6 +1,7 @@
 ALGORITMO Fatorial; 
 VARIAVEIS 
 res,fat,x,idade:INTEIRO; 
+ab,cont:REAL;
 FIM-VARIAVEIS 
 INICIO
 	imprima("Digite um número:");

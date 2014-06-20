@@ -6,6 +6,7 @@
 #include <string.h>
 #include <iostream>
 #include <ctype.h>
+#include "tslib.h"
 
 using namespace std;
 
@@ -80,6 +81,9 @@ void yyerror(const char *s);
 %{
 char buffer[1000];
 char nomeClasse[100];
+char *valorTabSimb;
+struct TS *tabSimb = NULL;
+int cont1=0,cont2=0;
 %}
 
 %start inicio
@@ -133,6 +137,7 @@ declaracao_variaveis:
 		strcat(declaraVar, $2);
 		strcat(declaraVar, " \n\ndef main");
 		$$ = declaraVar;
+		listar(tabSimb);
 	}
 	;
 
@@ -172,9 +177,13 @@ lista_Variaveis:
 variavel:
 	T_IDENTIFICADOR	{
 		$$ = $1;
+		tabSimb = incluiNome(tabSimb, $1);
+		cont2++;
 	}
 	|'`' T_IDENTIFICADOR '`' {
 		$$ = $1;
+		tabSimb = incluiNome(tabSimb, $1);
+		cont2++;
 	}
 	;
  
@@ -183,11 +192,26 @@ tipo_Variavel:
 	;
 
 tipo_primitivo:
-	T_TIPO_INTEIRO
-	| T_TIPO_REAL
-	| T_TIPO_CARACTERE
-	| T_TIPO_LITERAL
-	| T_TIPO_LOGICO
+	T_TIPO_INTEIRO {
+		tabSimb = geraTipos(tabSimb, "int", cont1, (cont2-1));
+		cont1=cont2;
+	}
+	| T_TIPO_REAL {
+		tabSimb = geraTipos(tabSimb, "double", cont1, (cont2-1));
+		cont1=cont2;
+	}
+	| T_TIPO_CARACTERE {
+		tabSimb = geraTipos(tabSimb, "char", cont1, (cont2-1));
+		cont1=cont2;
+	}
+	| T_TIPO_LITERAL {
+		tabSimb = geraTipos(tabSimb, "String", cont1, (cont2-1));
+		cont1=cont2;
+	}
+	| T_TIPO_LOGICO {
+		tabSimb = geraTipos(tabSimb, "bool", cont1, (cont2-1));
+		cont1=cont2;
+	}
 	;
 
 corpo_programa:
@@ -480,6 +504,7 @@ funcao_leia:
 	{
 		char *leia = (char *) malloc (sizeof(char));
 		strcpy(leia, "gets ");
+		
 		$$ = leia;
 	}
 ;

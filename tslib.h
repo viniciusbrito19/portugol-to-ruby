@@ -120,6 +120,8 @@ struct TS *geraTipos (struct TS *pLista, char *t, int min, int max)
 			pAux = pAux->Prox;
 		}
 	}
+
+	return pLista;
 }
 
 // Exclusoes
