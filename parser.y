@@ -94,7 +94,8 @@ inicio:
 	algoritmo {
 		printf("%s",$1);
 	}
-;
+	;
+
 algoritmo:
 	declaracao_algoritmo
 	| declaracao_variaveis
@@ -125,10 +126,6 @@ declaracao_algoritmo:
 	}
 	;
 
-classe:
-	T_IDENTIFICADOR 
-	;
-
 declaracao_variaveis:
 	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS 
 	{
@@ -137,7 +134,6 @@ declaracao_variaveis:
 		strcat(declaraVar, $2);
 		strcat(declaraVar, " \n\ndef main");
 		$$ = declaraVar;
-		listar(tabSimb);
 	}
 	;
 
@@ -165,11 +161,13 @@ lista_Variaveis:
 		strcpy(var, $1);
 		strcat(var, ", :");
 		strcat(var, $3);
+		tabSimb = incluiNome(tabSimb, $3);
 		$$ = var;
 	}
 	| variavel {
 		char *var1 = (char *) malloc (strlen($1)+2);
 		strcat(var1, $1);
+		tabSimb = incluiNome(tabSimb, $1);
 		$$ = var1;
 	}
 	;
@@ -177,12 +175,10 @@ lista_Variaveis:
 variavel:
 	T_IDENTIFICADOR	{
 		$$ = $1;
-		tabSimb = incluiNome(tabSimb, $1);
 		cont2++;
 	}
 	|'`' T_IDENTIFICADOR '`' {
 		$$ = $1;
-		tabSimb = incluiNome(tabSimb, $1);
 		cont2++;
 	}
 	;
@@ -347,6 +343,8 @@ lvalue:
 
 atribuicao:
 	variavel T_ATRIBUICAO expressao T_PONTO_VIRGULA{
+		tabSimb = incluiValor(tabSimb, $1, $3);
+		listar(tabSimb);
 		char *atribuicao = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+5);
 		strcpy(atribuicao,"\n\t");
 		strcat(atribuicao, "@");

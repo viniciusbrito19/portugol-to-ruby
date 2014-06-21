@@ -8,13 +8,11 @@
 %}
  
 /* Definições */
-
-DEC_LIT [0-9]+
-REAL_LIT {DEC_LIT}+("."{DEC_LIT})+
-digit [0-9]
-INT_LIT {digit}+
+DIGITO [0-9]
+DEC_LIT {DIGITO}+
+INT_LIT ("+"|"-"){DEC_LIT}
+REAL_LIT {DEC_LIT}+("."{DEC_LIT})
 IDENTIFICADOR [a-zA-Z_][a-zA-Z0-9_]*
-DIGITOS [0-9]+
 LETRA [A-Za-záÉçãêü\)\(@\{\}/]+
 ESPACO [" "]
 PONTUACAO [–.:,-\<=\\>\>\\n\#]+

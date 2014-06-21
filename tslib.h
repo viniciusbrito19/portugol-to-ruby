@@ -12,7 +12,7 @@ struct TS
 	struct TS *Prox;
 };
 
-// Relacionamentos com a Lista
+// Verifica se a lista esta vazia
 int seVazia(struct TS *pLista)
 {
 	if(pLista==NULL)
@@ -21,19 +21,20 @@ int seVazia(struct TS *pLista)
 		return 0;
 }
 
+// Exporta os dados em Arquivos/ts.txt
 void listar(struct TS *pLista)
 {
+    FILE *ts = fopen("Arquivos/ts.txt","w");
+    fflush(ts);
 	if(seVazia(pLista)==1)
 	{
-		printf("Lista Vazia!");
+		fprintf(ts,"Lista Vazia!");
 	}
 	else
 	{
 		int id=1;
 		struct TS *pAux;	
 		pAux = pLista;
-    	FILE *ts = fopen("Arquivos/ts.txt","w");
-    	fflush(ts);
 		while(pAux!=NULL)
 		{
 			fprintf(ts,"\n====%d====\n", id);
@@ -42,11 +43,11 @@ void listar(struct TS *pLista)
 			id++;
 			pAux = pAux->Prox;
 		}
-    	fclose(ts);		
 	}
+    fclose(ts);
 }
 
-// Inclusoes
+// Inclui com todos os Campos
 struct TS *inclui(struct TS *pLista, char *n, char *t, char *v, int e)
 {
 	struct TS *pNovoNo = (struct TS*) malloc(sizeof(struct TS));
@@ -77,6 +78,7 @@ struct TS *inclui(struct TS *pLista, char *n, char *t, char *v, int e)
 	return pLista;
 }
 
+// Inclui com nome apenas
 struct TS *incluiNome(struct TS *pLista, char *n)
 {
 	struct TS *pNovoNo = (struct TS*) malloc(sizeof(struct TS));
@@ -103,7 +105,21 @@ struct TS *incluiNome(struct TS *pLista, char *n)
 	return pLista;
 }
 
-struct TS *geraTipos (struct TS *pLista, char *t, int min, int max)
+// Inclui o Valor em um no de mesmo nome
+struct TS *incluiValor(struct TS *pLista, char *n, char *v)
+{
+	struct TS *pAux;
+	char *valor = (char*) malloc(sizeof(v));
+	strcpy(valor,v);
+	pAux = pLista;
+	while(strcmp(pAux->nome,n)!=0)
+		pAux = pAux->Prox;
+	pAux->valor = valor;
+	return pLista;
+}
+
+// Inclui tipos em um raio (min-max) de nos da Lista
+struct TS *geraTipos(struct TS *pLista, const char *t, int min, int max)
 {
 	int i;
 	char *tipo = (char*) malloc(sizeof(t));
@@ -124,7 +140,7 @@ struct TS *geraTipos (struct TS *pLista, char *t, int min, int max)
 	return pLista;
 }
 
-// Exclusoes
+// Exclui o primeiro no
 struct TS *excluiHead(struct TS *pLista)
 {
 	struct TS *pAux;
@@ -134,6 +150,7 @@ struct TS *excluiHead(struct TS *pLista)
 	return pLista;
 }
 
+// Exclui o ultimo no
 struct TS *excluiTail(struct TS *pLista)
 {
 	struct TS *pAux;
@@ -145,14 +162,75 @@ struct TS *excluiTail(struct TS *pLista)
 	return pLista;
 }
 
+// Exclui um no pesquisando pelo campo nome
 struct TS *excluiNome(struct TS *pLista, char *ref)
 {
 	struct TS *pAnt, *pPost;
 	pAnt = pLista;
-	while(pAnt->Prox->nome!=ref)
+	while(strcmp(pAnt->Prox->nome,ref)!=0)
 		pAnt = pAnt->Prox;
 	pPost = pAnt->Prox->Prox;
 	free(pAnt->Prox);
 	pAnt->Prox=pPost;
 	return pLista;
+}
+
+// Pesquisa um no e retorna 1 se existir
+int existe(struct TS *pLista, char *n, char *t, char *v, int e)
+{
+	struct TS *pAux;
+	pAux = pLista;
+	while((strcmp(pAux->nome,n)!=0)||(strcmp(pAux->tipo,t)!=0)||(strcmp(pAux->valor,v)!=0)||(pAux->escopo!=e))
+		pAux = pAux->Prox;
+	return 1;
+}
+
+// Retorna o primeiro no econtrado com o mesmo nome
+struct TS *pesquisa(struct TS *pLista, char *n)
+{
+	struct TS *pAux;
+	pAux = pLista;
+	while(strcmp(pAux->nome,n)!=0)
+		pAux = pAux->Prox;
+	return pAux;
+}
+
+// Pesquisa um no e retorna o no
+char *pesquisaNome(struct TS *pLista, char *t, char *v, int e)
+{
+	struct TS *pAux;
+	pAux = pLista;
+	while((strcmp(pAux->tipo,t)!=0)||(strcmp(pAux->valor,v)!=0)||(pAux->escopo!=e))
+		pAux = pAux->Prox;
+	return pAux->nome;
+}
+
+// Pesquisa um no pelo nome, valor e escopo e retorna o tipo
+char *pesquisaTipo(struct TS *pLista, char *n, char *v, int e)
+{
+	struct TS *pAux;
+	pAux = pLista;
+	while((strcmp(pAux->nome,n)!=0)||(strcmp(pAux->valor,v)!=0)||(pAux->escopo!=e))
+		pAux = pAux->Prox;
+	return pAux->tipo;	
+}
+
+// Pesquisa um no pelo nome, tipo e escopo e retorna o valor
+char *pesquisaValor(struct TS *pLista, char *n, char *t, int e)
+{
+	struct TS *pAux;
+	pAux = pLista;
+	while((strcmp(pAux->nome,n)!=0)||(strcmp(pAux->tipo,t)!=0)||(pAux->escopo!=e))
+		pAux = pAux->Prox;
+	return pAux->valor;	
+}
+
+// Pesquisa um no pelo nome, tipo e valor e retorna o escopo
+int pesquisaEscopo(struct TS *pLista, char *n, char *t, char *v)
+{
+	struct TS *pAux;
+	pAux = pLista;
+	while((strcmp(pAux->nome,n)!=0)||(strcmp(pAux->tipo,t)!=0)||(strcmp(pAux->valor,v)!=0))
+		pAux = pAux->Prox;
+	return pAux->escopo;	
 }

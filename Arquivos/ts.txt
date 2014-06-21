@@ -1,0 +1,36 @@
+
+====1====
+| Nome: res
+| Tipo: int
+| Valor: @res*@x
+| Escopo: 0
+
+====2====
+| Nome: fat
+| Tipo: int
+| Valor: gets 
+| Escopo: 0
+
+====3====
+| Nome: x
+| Tipo: int
+| Valor: (null)
+| Escopo: 0
+
+====4====
+| Nome: idade
+| Tipo: int
+| Valor: (null)
+| Escopo: 0
+
+====5====
+| Nome: ab
+| Tipo: double
+| Valor: (null)
+| Escopo: 0
+
+====6====
+| Nome: cont
+| Tipo: double
+| Valor: (null)
+| Escopo: 0
