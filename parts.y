@@ -82,7 +82,9 @@ void yyerror(const char *s);
 char buffer[1000];
 char nomeClasse[100];
 char *valorTabSimb;
+struct TS *tabOC = NULL;
 struct TS *tabSimb = NULL;
+struct TS *tabTerm = NULL;
 int cont1=0,cont2=0;
 %}
 

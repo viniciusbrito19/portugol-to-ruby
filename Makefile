@@ -1,10 +1,10 @@
-portugolrb: scanner.l parser.y
-	bison -d parser.y
-	mv parser.tab.h parser.h
-	mv parser.tab.c parser.c
-	flex scanner.l
-	mv lex.yy.c scanner.c
-	g++ parser.c scanner.c -Wall -o portugolrb -lfl -lm
+portugolrb: lexts.l parts.y
+	bison -d parts.y
+	mv parts.tab.h parts.h
+	mv parts.tab.c parts.c
+	flex lexts.l
+	mv lex.yy.c lexts.c
+	g++ parts.c lexts.c -Wall -o portugolrb -lfl -lm
 
 create: portugolrb
 	./portugolrb entrada.gpt >> saida.rb
@@ -13,4 +13,4 @@ recreate: portugolrb
 	rm saida.rb
 	./portugolrb entrada.gpt >> saida.rb
 clean:
-	rm -f scanner.c parser.c parser.h portugolrb saida.rb
+	rm -f lexts.c parts.c parts.h portugolrb saida.rb

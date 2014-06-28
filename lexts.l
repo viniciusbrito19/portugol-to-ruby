@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "common.h"
-#include "parser.h"
+#include "parts.h"
 #include <stdlib.h>
 #define YY_DECL extern int yylex()
 %}
