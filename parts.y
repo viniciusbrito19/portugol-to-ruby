@@ -102,75 +102,69 @@ algoritmo:
 	declaracao_algoritmo
 	| declaracao_variaveis
 	| corpo_programa
-	| declaracao_algoritmo declaracao_variaveis{
-		char *declaracao1 = (char *) malloc (strlen($1)+strlen($2)+1);
-		strcpy(declaracao1, $1);
-		strcat(declaracao1, $2);
-		$$ = declaracao1;
+	| declaracao_algoritmo declaracao_variaveis {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		$$ = dec;
 	}
-	| declaracao_algoritmo declaracao_variaveis corpo_programa{
-		char *declaracao2 = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(declaracao2, $1);
-		strcat(declaracao2, $2);
-		strcat(declaracao2, $3);
-		$$ = declaracao2;
+	| declaracao_algoritmo declaracao_variaveis corpo_programa {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	;
 
 declaracao_algoritmo:
 	T_ALGORITMO T_IDENTIFICADOR T_PONTO_VIRGULA {
-		char *declara1 = (char *) malloc (strlen($2)+1);
-		strcpy(declara1, "class ");
-		strcat(declara1, $2);
-		strcpy(nomeClasse,$2);
-		strcat(declara1, " \n");
-		$$ = declara1;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	;
 
 declaracao_variaveis:
-	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS 
-	{
-		char *declaraVar = (char *) malloc (strlen($2)+27);
-		strcpy(declaraVar, "attr_accessor ");
-		strcat(declaraVar, $2);
-		strcat(declaraVar, " \n\ndef main");
-		$$ = declaraVar;
+	T_VARIAVEIS declara_Tipo T_FIM_VARIAVEIS {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	;
 
 declara_Tipo:
-	lista_Variaveis tipo_Variavel{
-		char *tipovar1 = (char *) malloc (strlen($1)+1);
-		strcpy(tipovar1," :");
-		strcat(tipovar1, $1);
-		$$ = tipovar1;
+	lista_Variaveis tipo_Variavel {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		$$ = dec;
 	}
 	| lista_Variaveis tipo_Variavel declara_Tipo {
-		char *tipovar = (char *) malloc (strlen($1)+strlen($3)+3);
-		strcpy(tipovar, " :");
-		strcat(tipovar, $1);
-		strcat(tipovar, ", ");
-		strcat(tipovar, $3);
-		$$ = tipovar;
-	}	
-
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
+	}
 	;
 
 lista_Variaveis:
 	lista_Variaveis T_VIRGULA variavel {
-		char *var = (char *) malloc (strlen($1)+strlen($3)+4);
-		strcpy(var, $1);
-		strcat(var, ", :");
-		strcat(var, $3);
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
 		tabSimb = incluiNome(tabSimb, $3);
-		$$ = var;
+		$$ = dec;
 	}
 	| variavel {
-		char *var1 = (char *) malloc (strlen($1)+2);
-		strcat(var1, $1);
 		tabSimb = incluiNome(tabSimb, $1);
-		$$ = var1;
+		$$ = $1;
 	}
 	;
 
@@ -186,452 +180,405 @@ variavel:
 	;
  
 tipo_Variavel:
-	T_RECEBER tipo_primitivo T_PONTO_VIRGULA
+	T_RECEBER tipo_primitivo T_PONTO_VIRGULA {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
+	}
 	;
 
 tipo_primitivo:
 	T_TIPO_INTEIRO {
 		tabSimb = geraTipos(tabSimb, "int", cont1, (cont2-1));
 		cont1=cont2;
+		$$ = $1;
 	}
 	| T_TIPO_REAL {
 		tabSimb = geraTipos(tabSimb, "double", cont1, (cont2-1));
 		cont1=cont2;
+		$$ = $1;
 	}
 	| T_TIPO_CARACTERE {
 		tabSimb = geraTipos(tabSimb, "char", cont1, (cont2-1));
 		cont1=cont2;
+		$$ = $1;
 	}
 	| T_TIPO_LITERAL {
 		tabSimb = geraTipos(tabSimb, "String", cont1, (cont2-1));
 		cont1=cont2;
+		$$ = $1;
 	}
 	| T_TIPO_LOGICO {
 		tabSimb = geraTipos(tabSimb, "bool", cont1, (cont2-1));
 		cont1=cont2;
+		$$ = $1;
 	}
 	;
 
 corpo_programa:
-	T_INICIO corpo_lista T_FIM{
-		char *corpo = (char *) malloc (strlen($2)+140);
-		strcpy(corpo, $2);
-		strcat(corpo, "\nend\nend");
-		strcat(corpo, "\nobj = ");
-		strcat(corpo, nomeClasse);
-		strcat(corpo, ".new()\nobj.main");
-		$$ = corpo;
+	T_INICIO corpo_lista T_FIM {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	;
 
 corpo_lista:
-	corpo_lista lista_funcionalidades{
-		char *corpoLista1 = (char *) malloc (strlen($1)+strlen($2)+1);
-		strcpy(corpoLista1, $1);
-		strcat(corpoLista1, $2);
-		$$ = corpoLista1;
+	corpo_lista lista_funcionalidades {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		$$ = dec;
 	}
-	|lista_funcionalidades
-	{
-		char *corpoLista2 = (char *) malloc (strlen($1)+1);
-		strcpy(corpoLista2, $1);
-		$$ = corpoLista2;
+	|lista_funcionalidades{
+		$$ = $1;
 	}
-;
+	;
 
 lista_funcionalidades:
-	atribuicao lista_funcionalidades
-	{
-		char *func12 = (char *) malloc (strlen($1)+strlen($2));
-		strcpy(func12, $1);
-		strcat(func12, $2);
-		$$ = func12;
+	atribuicao lista_funcionalidades {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		$$ = dec;
 	}
-	| atribuicao 
-	{
-		char *func = (char *) malloc (strlen($1));
-		strcat(func, $1);
-		$$ = func;
+	| atribuicao {
+		$$ = $1;
 	}
-	| retorno T_PONTO_VIRGULA
-	{
-		char *retorne = (char *) malloc (strlen($1));
-		strcat(retorne, $1);
-		$$ = retorne;
+	| retorno T_PONTO_VIRGULA {
+		$$ = $1;
 	}
-	| funcao_se lista_funcionalidades
-	{
-		char *func31 = (char *) malloc (strlen($1)+strlen($2));
-		strcpy(func31, $1);
-		strcat(func31, $2);
-		$$ = func31;
+	| funcao_se lista_funcionalidades {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		$$ = dec;
 	}
-	| funcao_se
-	{
-		char *func2 = (char *) malloc (strlen($1));
-		strcat(func2, $1);
-		$$ = func2;
+	| funcao_se {
+		$$ = $1;
 	}
-	| funcao_enquanto lista_funcionalidades
-	{
-		char *func51 = (char *) malloc (strlen($1)+strlen($2));
-		strcpy(func51, $1);
-		strcat(func51, $2);
-		$$ = func51;
+	| funcao_enquanto lista_funcionalidades {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		$$ = dec;
 	}
-	| funcao_enquanto
-	{
-		char *func3 = (char *) malloc (strlen($1));
-		strcat(func3, $1);
-		$$ = func3;
+	| funcao_enquanto {
+		$$ = $1;
 	}
-	| funcao_para lista_funcionalidades
-	{
-		char *func61 = (char *) malloc (strlen($1)+strlen($2));
-		strcpy(func61, $1);
-		strcat(func61, $2);
-		$$ = func61;
+	| funcao_para lista_funcionalidades {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		$$ = dec;
 	}
-	| funcao_para
-	{
-		char *func4 = (char *) malloc (strlen($1));
-		strcat(func4, $1);
-		$$ = func4;
+	| funcao_para {
+		$$ = $1;
 	}
-	| funcao_imprima lista_funcionalidades
-	{
-		char *func71 = (char *) malloc (strlen($1)+strlen($2));
-		strcpy(func71, $1);
-		strcat(func71, $2);
-		$$ = func71;
+	| funcao_imprima lista_funcionalidades {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		$$ = dec;
 	}
-	| funcao_imprima
-	{
-		char *func5 = (char *) malloc (strlen($1));
-		strcat(func5, $1);
-		$$ = func5;
+	| funcao_imprima {
+		$$ = $1;
 	}
 	;
 
 retorno: 
-	T_RETORNE expressao 
-	{
-		char *retorne1 = (char *) malloc (strlen($2)+8);
-		strcpy(retorne1, "return ");
-		strcat(retorne1, $2);
-		$$ = retorne1;
+	T_RETORNE expressao {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		$$ = dec;
 	}
 	| T_RETORNE {
-		char *retorne2 = (char *) malloc (sizeof(char));
-		strcpy(retorne2, "return ");
-		$$ = retorne2;
+		$$ = $1;
 	}
 	;
 
 lvalue: 
 	T_IDENTIFICADOR
-	| T_IDENTIFICADOR T_ABRE_COLCHETES expressao T_FECHA_COLCHETES{
-		char *valor = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+3);
-		strcpy(valor, $1);
-		strcat(valor, $2);
-		strcat(valor, " ");
-		strcat(valor, $3);
-		strcat(valor, " ");
-		strcat(valor, $4);
-		$$ = valor;
+	| T_IDENTIFICADOR T_ABRE_COLCHETES expressao T_FECHA_COLCHETES {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		strcat(dec, $4);
+		$$ = dec;
 	}
 	;
 
-
 atribuicao:
-	variavel T_ATRIBUICAO expressao T_PONTO_VIRGULA{
+	variavel T_ATRIBUICAO expressao T_PONTO_VIRGULA {
 		tabSimb = incluiValor(tabSimb, $1, $3);
 		listar(tabSimb);
-		char *atribuicao = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+5);
-		strcpy(atribuicao,"\n\t");
-		strcat(atribuicao, "@");
-		strcat(atribuicao, $1);
-		strcat(atribuicao, "=");
-		strcat(atribuicao, $3);
-		strcat(atribuicao, "\n");
-		$$ = atribuicao;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		strcat(dec, $4);
+		$$ = dec;
 	}
 	;
 
 funcao_se: 
-	T_SE expressao T_ENTAO lista_funcionalidades T_SENAO lista_funcionalidades T_FIM_SE{		
-		char *funcaose = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+30);
-		strcpy(funcaose, "\n\tif @");
-		strcat(funcaose, $2);
-		strcat(funcaose, "\n\t\t");
-		strcat(funcaose, $4);
-		strcat(funcaose, "\n\telse ");
-		strcat(funcaose, "\n\t\t");
-		strcat(funcaose, $6);
-		strcat(funcaose, "\n\tend ");
-		$$ = funcaose;
-		
+	T_SE expressao T_ENTAO lista_funcionalidades T_SENAO lista_funcionalidades T_FIM_SE {		
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+strlen($5)+strlen($6)+strlen($7)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		strcat(dec, $4);
+		strcat(dec, $5);
+		strcat(dec, $6);
+		strcat(dec, $7);
+		$$ = dec;
 	}
-	| T_SE expressao T_ENTAO lista_funcionalidades T_FIM_SE{
-		char *funcaose1 = (char *) malloc (strlen($2)+strlen($4)+20);
-		strcpy(funcaose1, "\n\tif @");
-		strcat(funcaose1, $2);
-		strcat(funcaose1, "\n\t\t");
-		strcat(funcaose1, $4);
-		strcat(funcaose1, "\n\tend ");
-		$$ = funcaose1;
+	| T_SE expressao T_ENTAO lista_funcionalidades T_FIM_SE {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+strlen($5)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		strcat(dec, $4);
+		strcat(dec, $5);
+		$$ = dec;
 	}
 	;
 
-funcao_enquanto
-	: T_ENQUANTO expressao T_FACA lista_funcionalidades T_FIM_ENQUANTO{
-		char *enquanto = (char *) malloc (strlen($2)+strlen($4)+18);
-		strcpy(enquanto, "\n\twhile ");
-		strcat(enquanto, $2);
-		strcat(enquanto, "\n\t\t");
-		strcat(enquanto, $4);
-		strcat(enquanto, "\n\tend ");
-		$$ = enquanto;
+funcao_enquanto:
+	T_ENQUANTO expressao T_FACA lista_funcionalidades T_FIM_ENQUANTO {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+strlen($5)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		strcat(dec, $4);
+		strcat(dec, $5);
+		$$ = dec;
 	}
 	;
 
-funcao_para
-	: T_PARA lvalue T_DE expressao T_ATE expressao T_FACA lista_funcionalidades T_FIM_PARA
-	{
-		char *para1 = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+strlen($8)+30);
-		strcpy(para1, "\n\tfor @");
-		strcat(para1, $2);
-		strcat(para1, " in ");
-		strcat(para1, $4);
-		strcat(para1, "..@");
-		strcat(para1, $6);
-		strcat(para1, ".to_i");
-		strcat(para1, "\n");
-		strcat(para1, $8);
-		strcat(para1, "\n\tend ");
-		$$ = para1;
+funcao_para:
+	T_PARA lvalue T_DE expressao T_ATE expressao T_FACA lista_funcionalidades T_FIM_PARA {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+strlen($5)+strlen($6)+strlen($7)+strlen($8)+strlen($9)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		strcat(dec, $4);
+		strcat(dec, $5);
+		strcat(dec, $6);
+		strcat(dec, $7);
+		strcat(dec, $8);
+		strcat(dec, $9);
+		$$ = dec;
 	}
-	| T_PARA lvalue T_DE expressao T_ATE expressao passo T_FACA lista_funcionalidades T_FIM_PARA
-	{
-		char *para2 = (char *) malloc (strlen($2)+strlen($4)+strlen($6)+strlen($7)+strlen($9)+25);
-		strcpy(para2, "\n\tfor @");
-		strcat(para2, $2);
-		strcat(para2, " in ");
-		strcat(para2, $4);
-		strcat(para2, "..@");
-		strcat(para2, $6);
-		strcat(para2, "\n\t\t");
-		strcat(para2, "@");
-		strcat(para2, $2);
-		strcat(para2, $7);
-		strcat(para2, "\n");
-		strcat(para2, $9);
-		strcat(para2, "\n\tend ");
-		$$ = para2;
+	| T_PARA lvalue T_DE expressao T_ATE expressao passo T_FACA lista_funcionalidades T_FIM_PARA {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+strlen($5)+strlen($6)+strlen($7)+strlen($8)+strlen($9)+strlen($10)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		strcat(dec, $4);
+		strcat(dec, $5);
+		strcat(dec, $6);
+		strcat(dec, $7);
+		strcat(dec, $8);
+		strcat(dec, $9);
+		strcat(dec, $10);
+		$$ = dec;
 	}
 	;
+
 passo
-	: T_PASSO T_SUBTRACAO T_INT_LIT
-	{
-		char *passo = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(passo, $2);
-		strcat(passo, "=");
-		strcat(passo, $3);
-		$$ = passo;
+	: T_PASSO T_SUBTRACAO T_INT_LIT {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
-	|T_PASSO T_SOMA T_INT_LIT
-	{
-		char *passo = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(passo, $2);
-		strcat(passo, "=");
-		strcat(passo, $3);
-		$$ = passo;
+	|T_PASSO T_SOMA T_INT_LIT {
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	;
 
 funcao_imprima:
-	T_IMPRIMA T_ABRE_PARENTESES printar T_FECHA_PARENTESES T_PONTO_VIRGULA
-	{ 
-		char *fprint = (char *) malloc (strlen($3)+8);
-		strcpy(fprint, "\n\tputs ");
-		strcat(fprint, $3 );
-		$$ = fprint;
+	T_IMPRIMA T_ABRE_PARENTESES printar T_FECHA_PARENTESES T_PONTO_VIRGULA { 
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+strlen($5)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		strcat(dec, $4);
+		strcat(dec, $5);
+		$$ = dec;
 	}
-;
+	;
 
 printar: 
 	printar T_VIRGULA lista_Variaveis T_VIRGULA printar { 
-		char *print1 = (char *) malloc (strlen($1)+strlen($3)+strlen($5)+4);
-		strcpy(print1, $1);
-		strcat(print1, ",@");
-		strcat(print1, $3);
-		strcat(print1, ",");
-		strcat(print1, $5);
-		$$ = print1;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+strlen($5)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		strcat(dec, $4);
+		strcat(dec, $5);
+		$$ = dec;
 	}
 	| printar T_VIRGULA lista_Variaveis  { 
-		char *print2 = (char *) malloc (strlen($1)+strlen($3)+3);
-		strcpy(print2, $1);
-		strcat(print2, ",@");
-		strcat(print2, $3);
-		$$ = print2;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| lista_Variaveis T_VIRGULA printar { 
-		char *print3 = (char *) malloc (strlen($1)+strlen($3)+3);
-		strcpy(print3, "@");
-		strcat(print3, $1);
-		strcat(print3, ",");
-		strcat(print3, $3);
-		$$ = print3;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
-	| lista_Variaveis
-	{
-		char *print4 = (char *) malloc (strlen($1)+2);
-		strcpy(print4, "@");
-		strcat(print4, $1);
-		$$ = print4;
+	| lista_Variaveis {
+		$$ = $1;
 	}
-	| T_PRINTAR
-	{
-		char *print5 = (char *) malloc (strlen($1)+1);
-		strcpy(print5, $1);
-		$$ = print5;	
+	| T_PRINTAR {
+		$$ = $1;
 	}
-;
+	;
 
 funcao_leia: 
-	T_LEIA
-	{
-		char *leia = (char *) malloc (sizeof(char));
-		strcpy(leia, "gets ");
-		
-		$$ = leia;
+	T_LEIA {
+		$$ = $1;
 	}
-;
+	;
 expressao:
 	expressao T_OR expressao {		
-		char *exp1 = (char *) malloc (sizeof(char));
-		strcpy(exp1, $1);
-		strcat(exp1, " || ");
-		strcat(exp1, $3);
-		$$ = exp1;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_OR2 expressao {		
-		char *exp2 = (char *) malloc (sizeof(char));
-		strcpy(exp2, $1);
-		strcat(exp2, " || ");
-		strcat(exp2, $3);
-		$$ = exp2;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_AND expressao {		
-		char *exp3 = (char *) malloc (sizeof(char));
-		strcpy(exp3, $1);
-		strcat(exp3, " && ");
-		strcat(exp3, $3);
-		$$ = exp3;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_AND2 expressao {		
-		char *exp4 = (char *) malloc (sizeof(char));
-		strcpy(exp4, $1);
-		strcat(exp4, " && ");
-		strcat(exp4, $3);
-		$$ = exp4;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
-	//| expressao "|" expressao
-	//| expressao "^" expressao
-	//| expressao "&" expressao
 	| expressao T_IGUAL expressao {		
-		char *exp5 = (char *) malloc (sizeof(char));
-		strcpy(exp5, $1);
-		strcat(exp5, " = ");
-		strcat(exp5, $3);
-		$$ = exp5;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_DIFERENTE expressao {
-		char *exp6 = (char *) malloc (sizeof(char));
-		strcpy(exp6, $1);
-		strcat(exp6, " != ");
-		strcat(exp6, $3);
-		$$ = exp6;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_MAIOR expressao {		
-		char *exp7 = (char *) malloc (sizeof(char));
-		strcpy(exp7, $1);
-		strcat(exp7, ".to_i");
-		strcat(exp7, $2);
-		strcat(exp7, $3);
-		$$ = exp7;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_MAIOR_IGUAL expressao {		
-		char *exp8 = (char *) malloc (sizeof(char));
-		strcpy(exp8, $1);
-		strcat(exp8, $2);
-		strcat(exp8, $3);
-		$$ = exp8;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_MENOR expressao {		
-		char *exp9 = (char *) malloc (sizeof(char));
-		strcpy(exp9, $1);
-		strcat(exp9, $2);
-		strcat(exp9, $3);
-		$$ = exp9;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_MENOR_IGUAL expressao {		
-		char *exp10 = (char *) malloc (sizeof(char));
-		strcpy(exp10, $1);
-		strcat(exp10, $2);
-		strcat(exp10, $3);
-		$$ = exp10;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_SOMA expressao {		
-		char *exp11 = (char *) malloc (sizeof(char));
-		strcpy(exp11, $1);
-		strcat(exp11, $2);
-		strcat(exp11, $3);
-		$$ = exp11;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_SUBTRACAO expressao{		
-		char *exp12 = (char *) malloc (sizeof(char));
-		strcpy(exp12, $1);
-		strcat(exp12, $2);
-		strcat(exp12, $3);
-		$$ = exp12;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_DIVISAO expressao {		
-		char *exp13 = (char *) malloc (sizeof(char));
-		strcpy(exp13, $1);
-		strcat(exp13, $2);
-		strcat(exp13, $3);
-		$$ = exp13;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_MULTIPLICACAO expressao {		
-		char *exp14 = (char *) malloc (sizeof(char));
-		strcpy(exp14,"@");
-		strcat(exp14, $1);
-		strcat(exp14, "*@");
-		strcat(exp14, $3);
-		$$ = exp14;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| expressao T_PORCENTAGEM expressao {		
-		char *exp15 = (char *) malloc (sizeof(char));
-		strcpy(exp15, $1);
-		strcat(exp15, $2);
-		strcat(exp15, $3);
-		$$ = exp15;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	| T_SOMA termo {		
-		char *exp16 = (char *) malloc (sizeof(char));
-		strcpy(exp16, $1);
-		strcat(exp16, $2);
-		$$ = exp16;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		$$ = dec;
 	}
 	| T_SUBTRACAO termo {		
-		char *exp17 = (char *) malloc (sizeof(char));
-		strcpy(exp17, $1);
-		strcat(exp17, $2);
-		$$ = exp17;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		$$ = dec;
 	}
-	| termo
+	| termo {
+		$$ = $1;
+	}
 	;
 
 termo:
@@ -639,11 +586,11 @@ termo:
 	| literal
 	| funcao_leia
 	| T_ABRE_PARENTESES expressao T_FECHA_PARENTESES{
-		char *termo = (char *) malloc (sizeof(char));
-		strcpy(termo, " (");
-		strcat(termo, $2);
-		strcat(termo, ")");
-		$$ = termo;
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
+		strcpy(dec, $1);
+		strcat(dec, $2);
+		strcat(dec, $3);
+		$$ = dec;
 	}
 	;
 

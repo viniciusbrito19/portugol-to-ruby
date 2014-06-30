@@ -2,13 +2,13 @@
 ====1====
 | Nome: res
 | Tipo: int
-| Valor: @res*@x
+| Valor: res*x
 | Escopo: 0
 
 ====2====
 | Nome: fat
 | Tipo: int
-| Valor: gets 
+| Valor: leia()
 | Escopo: 0
 
 ====3====
