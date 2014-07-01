@@ -287,7 +287,7 @@ FECHA_PARENTESES [)]*
 	return T_RECEBER;
 }
 {PRINTAR} {
-	yylval = (char*) malloc( strlen(yylval)+1 ); 
+	yylval = (char*) malloc( strlen(yylval)+200 ); 
 	strcpy(yylval, yytext);
 	return T_PRINTAR;
 }

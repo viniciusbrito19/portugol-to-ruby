@@ -1,18 +1,15 @@
 ALGORITMO Fatorial; 
 VARIAVEIS 
-res,fat,x,idade:INTEIRO; 
-ab,cont:REAL;
+integer:INTEIRO;
+float:REAL;
+bool:LOGICO;
+string:LITERAL;
+char:CARACTERE;
 FIM-VARIAVEIS 
 INICIO
-	imprima("Digite um número:");
-	fat:=leia();
-	res := 1;
-	para x de 1 ate fat faca
-		res := res*x;
-	
-	fim-para	
-
-	imprima("Resultado é:",res);
-	imprima("Resultado x: ",x,"Resultado y: ",x);
-
+	integer := 2*2;
+	float := 3/2;
+	bool := 3>2;
+	string := "WOOT";
+	char := "s";
 FIM

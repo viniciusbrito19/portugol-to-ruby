@@ -191,27 +191,27 @@ tipo_Variavel:
 
 tipo_primitivo:
 	T_TIPO_INTEIRO {
-		tabSimb = geraTipos(tabSimb, "int", cont1, (cont2-1));
+		tabSimb = geraTipos(tabSimb, $1, cont1, (cont2-1));
 		cont1=cont2;
 		$$ = $1;
 	}
 	| T_TIPO_REAL {
-		tabSimb = geraTipos(tabSimb, "double", cont1, (cont2-1));
+		tabSimb = geraTipos(tabSimb, $1, cont1, (cont2-1));
 		cont1=cont2;
 		$$ = $1;
 	}
 	| T_TIPO_CARACTERE {
-		tabSimb = geraTipos(tabSimb, "char", cont1, (cont2-1));
+		tabSimb = geraTipos(tabSimb, $1, cont1, (cont2-1));
 		cont1=cont2;
 		$$ = $1;
 	}
 	| T_TIPO_LITERAL {
-		tabSimb = geraTipos(tabSimb, "String", cont1, (cont2-1));
+		tabSimb = geraTipos(tabSimb, $1, cont1, (cont2-1));
 		cont1=cont2;
 		$$ = $1;
 	}
 	| T_TIPO_LOGICO {
-		tabSimb = geraTipos(tabSimb, "bool", cont1, (cont2-1));
+		tabSimb = geraTipos(tabSimb, $1, cont1, (cont2-1));
 		cont1=cont2;
 		$$ = $1;
 	}
@@ -247,6 +247,7 @@ lista_funcionalidades:
 		$$ = dec;
 	}
 	| atribuicao {
+		listar(tabSimb);
 		$$ = $1;
 	}
 	| retorno T_PONTO_VIRGULA {
@@ -317,7 +318,6 @@ lvalue:
 atribuicao:
 	variavel T_ATRIBUICAO expressao T_PONTO_VIRGULA {
 		tabSimb = incluiValor(tabSimb, $1, $3);
-		listar(tabSimb);
 		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+1);
 		strcpy(dec, $1);
 		strcat(dec, $2);
@@ -422,7 +422,7 @@ funcao_imprima:
 	;
 
 printar: 
-	printar T_VIRGULA lista_Variaveis T_VIRGULA printar { 
+	printar T_VIRGULA variavel T_VIRGULA printar { 
 		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+strlen($5)+1);
 		strcpy(dec, $1);
 		strcat(dec, $2);
@@ -431,21 +431,21 @@ printar:
 		strcat(dec, $5);
 		$$ = dec;
 	}
-	| printar T_VIRGULA lista_Variaveis  { 
+	| printar T_VIRGULA variavel  { 
 		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
 		strcpy(dec, $1);
 		strcat(dec, $2);
 		strcat(dec, $3);
 		$$ = dec;
 	}
-	| lista_Variaveis T_VIRGULA printar { 
+	| variavel T_VIRGULA printar { 
 		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
 		strcpy(dec, $1);
 		strcat(dec, $2);
 		strcat(dec, $3);
 		$$ = dec;
 	}
-	| lista_Variaveis {
+	| variavel {
 		$$ = $1;
 	}
 	| T_PRINTAR {
@@ -460,73 +460,53 @@ funcao_leia:
 	;
 expressao:
 	expressao T_OR expressao {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
+		char *dec = (char *) malloc (7);
+		strcpy(dec, "LOGICO");
 		$$ = dec;
 	}
 	| expressao T_OR2 expressao {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
+		char *dec = (char *) malloc (7);
+		strcpy(dec, "LOGICO");
 		$$ = dec;
 	}
 	| expressao T_AND expressao {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
+		char *dec = (char *) malloc (7);
+		strcpy(dec, "LOGICO");
 		$$ = dec;
 	}
 	| expressao T_AND2 expressao {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
+		char *dec = (char *) malloc (7);
+		strcpy(dec, "LOGICO");
 		$$ = dec;
 	}
 	| expressao T_IGUAL expressao {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
+		char *dec = (char *) malloc (7);
+		strcpy(dec, "LOGICO");
 		$$ = dec;
 	}
 	| expressao T_DIFERENTE expressao {
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
+		char *dec = (char *) malloc (7);
+		strcpy(dec, "LOGICO");
 		$$ = dec;
 	}
 	| expressao T_MAIOR expressao {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
+		char *dec = (char *) malloc (7);
+		strcpy(dec, "LOGICO");
 		$$ = dec;
 	}
 	| expressao T_MAIOR_IGUAL expressao {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
+		char *dec = (char *) malloc (7);
+		strcpy(dec, "LOGICO");
 		$$ = dec;
 	}
 	| expressao T_MENOR expressao {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
+		char *dec = (char *) malloc (7);
+		strcpy(dec, "LOGICO");
 		$$ = dec;
 	}
 	| expressao T_MENOR_IGUAL expressao {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
+		char *dec = (char *) malloc (7);
+		strcpy(dec, "LOGICO");
 		$$ = dec;
 	}
 	| expressao T_SOMA expressao {		
@@ -544,10 +524,8 @@ expressao:
 		$$ = dec;
 	}
 	| expressao T_DIVISAO expressao {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
+		char *dec = (char *) malloc (5);
+		strcpy(dec, "REAL");
 		$$ = dec;
 	}
 	| expressao T_MULTIPLICACAO expressao {		
@@ -558,10 +536,8 @@ expressao:
 		$$ = dec;
 	}
 	| expressao T_PORCENTAGEM expressao {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
+		char *dec = (char *) malloc (8);
+		strcpy(dec, "INTEIRO");
 		$$ = dec;
 	}
 	| T_SOMA termo {		
@@ -584,7 +560,11 @@ expressao:
 termo:
 	lvalue
 	| literal
-	| funcao_leia
+	| funcao_leia {
+		char *dec = (char *) malloc (8);
+		strcpy(dec, "OK");
+		$$ = dec;
+	}
 	| T_ABRE_PARENTESES expressao T_FECHA_PARENTESES{
 		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
 		strcpy(dec, $1);
@@ -595,9 +575,21 @@ termo:
 	;
 
 literal: 
-	T_DEC_LIT
-	| T_INT_LIT
-	| T_REAL_LIT
+	T_DEC_LIT {
+		char *dec = (char *) malloc (8);
+		strcpy(dec, "INTEIRO");
+		$$ = dec;	
+	}
+	| T_INT_LIT {
+		char *dec = (char *) malloc (8);
+		strcpy(dec, "INTEIRO");
+		$$ = dec;
+	}
+	| T_REAL_LIT {
+		char *dec = (char *) malloc (5);
+		strcpy(dec, "REAL");
+		$$ = dec;
+	}
 	| T_PRINTAR
 	;
 

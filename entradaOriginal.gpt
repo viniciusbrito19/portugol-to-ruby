@@ -1,0 +1,18 @@
+ALGORITMO Fatorial; 
+VARIAVEIS 
+res,fat,x,idade:INTEIRO; 
+ab,cont:REAL;
+FIM-VARIAVEIS 
+INICIO
+	imprima("Digite um número:");
+	fat:=leia();
+	res := 1;
+	para x de 1 ate fat faca
+		res := res*x;
+	
+	fim-para	
+
+	imprima("Resultado é:",res);
+	imprima("Resultado x: ",x,"Resultado y: ",x);
+
+FIM
