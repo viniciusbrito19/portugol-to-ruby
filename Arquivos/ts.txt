@@ -2,7 +2,7 @@
 ====1====
 | Nome: res
 | Tipo: int
-| Valor: @res*@x
+| Valor: res*x
 | Escopo: 0
 
 ====2====

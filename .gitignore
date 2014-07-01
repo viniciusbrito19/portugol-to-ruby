@@ -10,4 +10,8 @@ lista.c~
 parser.h~
 parser.y~
 scanner.l~
+entrada.prg~
+saida.rb~
+Makefile~
+tslib.h~
 *~
