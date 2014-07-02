@@ -8,7 +8,7 @@
 | Coluna: 2~8
 
 | Registro de Erro: 
- Variavel sem Erros Detec! |
+Variavel sem Erros Detectados. |
 
 ====2====
 | Nome: float
@@ -19,7 +19,7 @@
 | Coluna: 2~6
 
 | Registro de Erro: 
- 24:2: Erro: [float]
+24:2: Erro: [float]
 --> A variavel na qual esta traz referencia nao foi declarada.
 -> Ocorrencias: 2 |
 
@@ -32,7 +32,7 @@
 | Coluna: 2~5
 
 | Registro de Erro: 
- Variavel sem Erros Detec! |
+Variavel sem Erros Detectados. |
 
 ====4====
 | Nome: string
@@ -43,7 +43,7 @@
 | Coluna: 2~7
 
 | Registro de Erro: 
- Variavel sem Erros Detec! |
+Variavel sem Erros Detectados. |
 
 ====5====
 | Nome: char
@@ -54,7 +54,7 @@
 | Coluna: 2~5
 
 | Registro de Erro: 
- Variavel sem Erros Detec! |
+Variavel sem Erros Detectados. |
 
 ====6====
 | Nome: integer2
@@ -65,7 +65,7 @@
 | Coluna: 2~9
 
 | Registro de Erro: 
- Variavel sem Erros Detec! |
+Variavel sem Erros Detectados. |
 
 ====7====
 | Nome: float2
@@ -76,7 +76,7 @@
 | Coluna: 2~7
 
 | Registro de Erro: 
- Variavel sem Erros Detec! |
+Variavel sem Erros Detectados. |
 
 ====8====
 | Nome: bool2
@@ -87,7 +87,7 @@
 | Coluna: 2~6
 
 | Registro de Erro: 
- Variavel sem Erros Detec! |
+Variavel sem Erros Detectados. |
 
 ====9====
 | Nome: string2
@@ -98,7 +98,7 @@
 | Coluna: 2~8
 
 | Registro de Erro: 
- Variavel sem Erros Detec! |
+Variavel sem Erros Detectados. |
 
 ====10====
 | Nome: char2
@@ -109,7 +109,7 @@
 | Coluna: 2~6
 
 | Registro de Erro: 
- Variavel sem Erros Detec! |
+Variavel sem Erros Detectados. |
 
 ====11====
 | Nome: integer3
@@ -120,7 +120,7 @@
 | Coluna: 2~9
 
 | Registro de Erro: 
- 35:2: Erro: [integer3]
+35:2: Erro: [integer3]
 --> Tipo REAL nao coerente com esta variavel (Do tipo: INTEIRO).
 -> Ocorrencias: 1 |
 
@@ -133,7 +133,7 @@
 | Coluna: 2~7
 
 | Registro de Erro: 
- 36:2: Erro: [float3]
+36:2: Erro: [float3]
 --> Tipo LITERAL nao coerente com esta variavel (Do tipo: REAL).
 -> Ocorrencias: 1 |
 
@@ -146,7 +146,7 @@
 | Coluna: 2~6
 
 | Registro de Erro: 
- 37:2: Erro: [bool3]
+37:2: Erro: [bool3]
 --> Tipo INTEIRO nao coerente com esta variavel (Do tipo: LOGICO).
 -> Ocorrencias: 2 |
 
@@ -159,7 +159,7 @@
 | Coluna: 2~8
 
 | Registro de Erro: 
- 38:2: Erro: [string3]
+38:2: Erro: [string3]
 --> Tipo INTEIRO nao coerente com esta variavel (Do tipo: LITERAL).
 -> Ocorrencias: 2 |
 
@@ -172,4 +172,6 @@
 | Coluna: 2~6
 
 | Registro de Erro: 
- (null) |
+39:2: Erro: [char3]
+--> Tipo INTEIRO nao coerente com esta variavel (Do tipo: CARACTERE).
+-> Ocorrencias: 2 |

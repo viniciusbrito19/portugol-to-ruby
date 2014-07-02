@@ -230,7 +230,7 @@ void listar(struct TS *pLista)
 			fprintf(ts,"\n====%d====\n", id);
 			fprintf(ts,"| Nome: %s\n| Tipo: %s\n| Valor: %d\n| Escopo: %d\n| Linha: %d~%d\n| Coluna: %d~%d\n",
 				pAux->nome, pAux->tipo, pAux->valor, pAux->escopo, pAux->local.first_line, pAux->local.last_line, pAux->local.first_column, pAux->local.last_column);
-			fprintf(ts,"\n| Registro de Erro: \n %s |\n", pAux->erro);
+			fprintf(ts,"\n| Registro de Erro: \n%s |\n", pAux->erro);
 			id++;
 			pAux = pAux->Prox;
 		}
@@ -435,12 +435,16 @@ char *verificaString(char *s)
 struct TS *geraRESporNo(struct TS *pNo)
 {
 	char *erro = (char*) malloc(sizeof(char));
+	char *cabecalho = (char*) malloc(sizeof(150));
 	struct TS *pAux = pNo;
 	if(pAux->valor==0)
-		strcpy(erro,"Variavel sem Erros Detectados.");
+	{
+		sprintf(cabecalho,"Variavel sem Erros Detectados.");
+		strcpy(erro, cabecalho);
+	}
 	else
 	{
-		char *cabecalho = (char*) malloc(sizeof(150));
+		
 		sprintf(cabecalho, "%d:%d: Erro: [%s]", pAux->local.first_line, pAux->local.first_column, pAux->nome);
 		strcpy(erro, cabecalho);
 		int contador = 0;
@@ -541,7 +545,7 @@ struct TS *geraRESporNo(struct TS *pNo)
 struct TS *geraRelatorioDeErrosSemanticos(struct TS *pLista)
 {
 	struct TS *pAux = pLista;
-	while(pAux->Prox!=NULL)
+	while(pAux!=NULL)
 	{
 		pAux = geraRESporNo(pAux);
 		pAux = pAux->Prox;
