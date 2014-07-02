@@ -2,29 +2,174 @@
 ====1====
 | Nome: integer
 | Tipo: INTEIRO
-| Valor: INTEIRO*INTEIRO
+| Valor: 0
 | Escopo: 0
+| Linha: 23~23
+| Coluna: 2~8
+
+| Registro de Erro: 
+ Variavel sem Erros Detec! |
 
 ====2====
 | Nome: float
 | Tipo: REAL
-| Valor: REAL
+| Valor: 200000
 | Escopo: 0
+| Linha: 24~24
+| Coluna: 2~6
+
+| Registro de Erro: 
+ 24:2: Erro: [float]
+--> A variavel na qual esta traz referencia nao foi declarada.
+-> Ocorrencias: 2 |
 
 ====3====
 | Nome: bool
 | Tipo: LOGICO
-| Valor: LOGICO
+| Valor: 0
 | Escopo: 0
+| Linha: 25~25
+| Coluna: 2~5
+
+| Registro de Erro: 
+ Variavel sem Erros Detec! |
 
 ====4====
 | Nome: string
 | Tipo: LITERAL
-| Valor: "WOOT"
+| Valor: 0
 | Escopo: 0
+| Linha: 26~26
+| Coluna: 2~7
+
+| Registro de Erro: 
+ Variavel sem Erros Detec! |
 
 ====5====
 | Nome: char
 | Tipo: CARACTERE
-| Valor: "s"
+| Valor: 0
 | Escopo: 0
+| Linha: 27~27
+| Coluna: 2~5
+
+| Registro de Erro: 
+ Variavel sem Erros Detec! |
+
+====6====
+| Nome: integer2
+| Tipo: INTEIRO
+| Valor: 0
+| Escopo: 0
+| Linha: 29~29
+| Coluna: 2~9
+
+| Registro de Erro: 
+ Variavel sem Erros Detec! |
+
+====7====
+| Nome: float2
+| Tipo: REAL
+| Valor: 0
+| Escopo: 0
+| Linha: 30~30
+| Coluna: 2~7
+
+| Registro de Erro: 
+ Variavel sem Erros Detec! |
+
+====8====
+| Nome: bool2
+| Tipo: LOGICO
+| Valor: 0
+| Escopo: 0
+| Linha: 31~31
+| Coluna: 2~6
+
+| Registro de Erro: 
+ Variavel sem Erros Detec! |
+
+====9====
+| Nome: string2
+| Tipo: LITERAL
+| Valor: 0
+| Escopo: 0
+| Linha: 32~32
+| Coluna: 2~8
+
+| Registro de Erro: 
+ Variavel sem Erros Detec! |
+
+====10====
+| Nome: char2
+| Tipo: CARACTERE
+| Valor: 0
+| Escopo: 0
+| Linha: 33~33
+| Coluna: 2~6
+
+| Registro de Erro: 
+ Variavel sem Erros Detec! |
+
+====11====
+| Nome: integer3
+| Tipo: INTEIRO
+| Valor: 1
+| Escopo: 0
+| Linha: 35~35
+| Coluna: 2~9
+
+| Registro de Erro: 
+ 35:2: Erro: [integer3]
+--> Tipo REAL nao coerente com esta variavel (Do tipo: INTEIRO).
+-> Ocorrencias: 1 |
+
+====12====
+| Nome: float3
+| Tipo: REAL
+| Valor: 1000
+| Escopo: 0
+| Linha: 36~36
+| Coluna: 2~7
+
+| Registro de Erro: 
+ 36:2: Erro: [float3]
+--> Tipo LITERAL nao coerente com esta variavel (Do tipo: REAL).
+-> Ocorrencias: 1 |
+
+====13====
+| Nome: bool3
+| Tipo: LOGICO
+| Valor: 20
+| Escopo: 0
+| Linha: 37~37
+| Coluna: 2~6
+
+| Registro de Erro: 
+ 37:2: Erro: [bool3]
+--> Tipo INTEIRO nao coerente com esta variavel (Do tipo: LOGICO).
+-> Ocorrencias: 2 |
+
+====14====
+| Nome: string3
+| Tipo: LITERAL
+| Valor: 20
+| Escopo: 0
+| Linha: 38~38
+| Coluna: 2~8
+
+| Registro de Erro: 
+ 38:2: Erro: [string3]
+--> Tipo INTEIRO nao coerente com esta variavel (Do tipo: LITERAL).
+-> Ocorrencias: 2 |
+
+====15====
+| Nome: char3
+| Tipo: CARACTERE
+| Valor: 20
+| Escopo: 0
+| Linha: 39~39
+| Coluna: 2~6
+
+| Registro de Erro: 
+ (null) |

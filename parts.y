@@ -78,6 +78,8 @@ void yyerror(const char *s);
 %left T_MULTIPLICACAO T_DIVISAO
 %left NEG
 
+%locations
+
 %{
 char buffer[1000];
 char nomeClasse[100];
@@ -159,11 +161,11 @@ lista_Variaveis:
 		strcpy(dec, $1);
 		strcat(dec, $2);
 		strcat(dec, $3);
-		tabSimb = incluiNome(tabSimb, $3);
+		tabSimb = incluiNome(tabSimb, $3, @3);
 		$$ = dec;
 	}
 	| variavel {
-		tabSimb = incluiNome(tabSimb, $1);
+		tabSimb = incluiNome(tabSimb, $1, @1);
 		$$ = $1;
 	}
 	;
@@ -223,6 +225,8 @@ corpo_programa:
 		strcpy(dec, $1);
 		strcat(dec, $2);
 		strcat(dec, $3);
+		tabSimb = geraRelatorioDeErrosSemanticos(tabSimb);
+		listar(tabSimb);
 		$$ = dec;
 	}
 	;
@@ -247,7 +251,6 @@ lista_funcionalidades:
 		$$ = dec;
 	}
 	| atribuicao {
-		listar(tabSimb);
 		$$ = $1;
 	}
 	| retorno T_PONTO_VIRGULA {
@@ -317,7 +320,7 @@ lvalue:
 
 atribuicao:
 	variavel T_ATRIBUICAO expressao T_PONTO_VIRGULA {
-		tabSimb = incluiValor(tabSimb, $1, $3);
+		tabSimb = incluiValor(tabSimb, $1, $3, @1);
 		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+strlen($4)+1);
 		strcpy(dec, $1);
 		strcat(dec, $2);
@@ -460,28 +463,38 @@ funcao_leia:
 	;
 expressao:
 	expressao T_OR expressao {		
-		char *dec = (char *) malloc (7);
-		strcpy(dec, "LOGICO");
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+4);
+		strcpy(dec, $1);
+		strcat(dec, " LOG ");
+		strcat(dec, $3);
 		$$ = dec;
 	}
 	| expressao T_OR2 expressao {		
-		char *dec = (char *) malloc (7);
-		strcpy(dec, "LOGICO");
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+4);
+		strcpy(dec, $1);
+		strcat(dec, " LOG ");
+		strcat(dec, $3);
 		$$ = dec;
 	}
 	| expressao T_AND expressao {		
-		char *dec = (char *) malloc (7);
-		strcpy(dec, "LOGICO");
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+4);
+		strcpy(dec, $1);
+		strcat(dec, " LOG ");
+		strcat(dec, $3);
 		$$ = dec;
 	}
 	| expressao T_AND2 expressao {		
-		char *dec = (char *) malloc (7);
-		strcpy(dec, "LOGICO");
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+4);
+		strcpy(dec, $1);
+		strcat(dec, " LOG ");
+		strcat(dec, $3);
 		$$ = dec;
 	}
 	| expressao T_IGUAL expressao {		
-		char *dec = (char *) malloc (7);
-		strcpy(dec, "LOGICO");
+		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+4);
+		strcpy(dec, $1);
+		strcat(dec, " LOG ");
+		strcat(dec, $3);
 		$$ = dec;
 	}
 	| expressao T_DIFERENTE expressao {
@@ -512,45 +525,39 @@ expressao:
 	| expressao T_SOMA expressao {		
 		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
 		strcpy(dec, $1);
-		strcat(dec, $2);
+		strcat(dec, " ");
 		strcat(dec, $3);
 		$$ = dec;
 	}
-	| expressao T_SUBTRACAO expressao{		
+	| expressao T_SUBTRACAO expressao {
 		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
 		strcpy(dec, $1);
-		strcat(dec, $2);
+		strcat(dec, " ");
 		strcat(dec, $3);
 		$$ = dec;
 	}
-	| expressao T_DIVISAO expressao {		
+	| expressao T_DIVISAO expressao {
 		char *dec = (char *) malloc (5);
 		strcpy(dec, "REAL");
 		$$ = dec;
 	}
-	| expressao T_MULTIPLICACAO expressao {		
+	| expressao T_MULTIPLICACAO expressao {
 		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
 		strcpy(dec, $1);
-		strcat(dec, $2);
+		strcat(dec, " ");
 		strcat(dec, $3);
 		$$ = dec;
 	}
-	| expressao T_PORCENTAGEM expressao {		
+	| expressao T_PORCENTAGEM expressao {
 		char *dec = (char *) malloc (8);
 		strcpy(dec, "INTEIRO");
 		$$ = dec;
 	}
-	| T_SOMA termo {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		$$ = dec;
+	| T_SOMA termo {
+		$$ = $2;
 	}
-	| T_SUBTRACAO termo {		
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		$$ = dec;
+	| T_SUBTRACAO termo {
+		$$ = $2;
 	}
 	| termo {
 		$$ = $1;
@@ -566,11 +573,7 @@ termo:
 		$$ = dec;
 	}
 	| T_ABRE_PARENTESES expressao T_FECHA_PARENTESES{
-		char *dec = (char *) malloc (strlen($1)+strlen($2)+strlen($3)+1);
-		strcpy(dec, $1);
-		strcat(dec, $2);
-		strcat(dec, $3);
-		$$ = dec;
+		$$ = $2;
 	}
 	;
 
@@ -590,14 +593,18 @@ literal:
 		strcpy(dec, "REAL");
 		$$ = dec;
 	}
-	| T_PRINTAR
+	| T_PRINTAR {
+		char *dec = NULL;
+		dec = verificaString($1);
+		$$ = dec;
+	}
 	;
 
 %%
  
 void yyerror(const char* errmsg)
 {
-	printf("\n*** Erro: %s\n", errmsg);
+	printf("\n***[%d] Erro: %s [%s]\n", yylineno, errmsg, yytext);
 }
  
 int main(int argc, char* argv[])

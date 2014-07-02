@@ -5,27 +5,35 @@
 #include "parts.h"
 #include <stdlib.h>
 #define YY_DECL extern int yylex()
+int yycolumn = 1;
+#define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno; \
+yylloc.first_column = yycolumn; yylloc.last_column = yycolumn+yyleng-1; \
+    yycolumn += yyleng;
 %}
  
 /* Definições */
 DIGITO [0-9]
 DEC_LIT {DIGITO}+
-INT_LIT ("+"|"-"){DEC_LIT}
+INT_LIT ("+"|"-").{DEC_LIT}
 REAL_LIT {DEC_LIT}+("."{DEC_LIT})
 IDENTIFICADOR [a-zA-Z_][a-zA-Z0-9_]*
 LETRA [A-Za-záÉçãêü\)\(@\{\}/]+
 ESPACO [" "]
 PONTUACAO [–.:,-\<=\\>\>\\n\#]+
 RECEBER [:]?
-WHITESPACE [ \n\r\t]+
+WHITESPACE [ \r\t]+
 PRINTAR \"[a-zA-Z0-9].*\"
 PONTO_VIRGULA [;]*
 ABRE_PARENTESES [(]*
 FECHA_PARENTESES [)]*
 
 %option case-insensitive noyywrap
+%option yylineno
 
 %%
+\n {
+	yycolumn = 1;
+	}
 {WHITESPACE} /* Ignore */ ;
 "ALGORITMO" {
 	yylval = (char*) malloc( sizeof(char) ); 
