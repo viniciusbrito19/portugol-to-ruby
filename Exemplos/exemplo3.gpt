@@ -13,6 +13,6 @@ INICIO
 		auxiliar := a + b;
 		a := b;
 		b := auxiliar;
-		imprima("-",auxiliar);
+		imprima(auxiliar);
 	fim-para
 FIM
