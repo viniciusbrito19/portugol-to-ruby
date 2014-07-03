@@ -1,0 +1,13 @@
+ALGORITMO ErroOcorrencia;
+VARIAVEIS
+recebeVarInex:INTEIRO;
+recebeVarInst:REAL;
+recebeDadosInc:LOGICO;
+varConflitos:LOGICO;
+FIM-VARIAVEIS
+INICIO
+	recebeVarInex := x*y*z;
+	recebeVarInst := recebeVarInex;
+	recebeDadosInc := 2+3*6*2;
+	varConflitos := 3*"FC"*5*3;
+FIM

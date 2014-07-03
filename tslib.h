@@ -1,9 +1,7 @@
-// Biblioteca para Tratamento da Lista da Tabela de Simbolos
 #include<stdio.h>
 #include<string.h>
 #include "parser_logger.h"
 
-// Struct
 struct TS
 {
 	char *nome;
@@ -15,7 +13,6 @@ struct TS
 	char *erro;
 };
 
-// Retorna o primeiro no econtrado com o mesmo nome
 struct TS *pesquisa(struct TS *pLista, char *n)
 {
 	struct TS *pAux;
@@ -185,7 +182,6 @@ int comparaCaractere(struct TS *pLista, char *valor)
 	return seIncorreto;
 }
 
-// Verifica se o Valor é coerente com o Tipo
 int trataValor(struct TS *pLista, char *tipo, char *valor)
 {
 	int valorTratado = 0;
@@ -202,7 +198,6 @@ int trataValor(struct TS *pLista, char *tipo, char *valor)
 	return valorTratado;
 }
 
-// Verifica se a lista esta vazia
 int seVazia(struct TS *pLista)
 {
 	if(pLista==NULL)
@@ -210,7 +205,6 @@ int seVazia(struct TS *pLista)
 	else
 		return 0;
 }
-// Inclui com todos os Campos
 struct TS *inclui(struct TS *pLista, char *n, char *t, int v, int e, struct YYLTYPE local)
 {
 	struct TS *pNovoNo = (struct TS*) malloc(sizeof(struct TS));
@@ -241,7 +235,6 @@ struct TS *inclui(struct TS *pLista, char *n, char *t, int v, int e, struct YYLT
 	return pLista;
 }
 
-// Inclui com nome apenas
 struct TS *incluiNome(struct TS *pLista, char *n, struct YYLTYPE local)
 {
 	struct TS *pNovoNo = (struct TS*) malloc(sizeof(struct TS));
@@ -270,7 +263,6 @@ struct TS *incluiNome(struct TS *pLista, char *n, struct YYLTYPE local)
 	return pLista;
 }
 
-// Inclui o Valor em um no de mesmo nome
 struct TS *incluiValor(struct TS *pLista, char *n, char *v, struct YYLTYPE local)
 {
 	struct TS *pAux;
@@ -282,7 +274,6 @@ struct TS *incluiValor(struct TS *pLista, char *n, char *v, struct YYLTYPE local
 	return pLista;
 }
 
-// Inclui tipos em um raio (min-max) de nos da Lista
 struct TS *geraTipos(struct TS *pLista, const char *t, int min, int max)
 {
 	int i;
@@ -304,7 +295,6 @@ struct TS *geraTipos(struct TS *pLista, const char *t, int min, int max)
 	return pLista;
 }
 
-// Exclui o primeiro no
 struct TS *excluiHead(struct TS *pLista)
 {
 	struct TS *pAux;
@@ -314,7 +304,6 @@ struct TS *excluiHead(struct TS *pLista)
 	return pLista;
 }
 
-// Exclui o ultimo no
 struct TS *excluiTail(struct TS *pLista)
 {
 	struct TS *pAux;
@@ -326,7 +315,6 @@ struct TS *excluiTail(struct TS *pLista)
 	return pLista;
 }
 
-// Exclui um no pesquisando pelo campo nome
 struct TS *excluiNome(struct TS *pLista, char *ref)
 {
 	struct TS *pAnt, *pPost;
@@ -339,7 +327,6 @@ struct TS *excluiNome(struct TS *pLista, char *ref)
 	return pLista;
 }
 
-// Pesquisa um no e retorna 1 se existir
 int existe(struct TS *pLista, char *n, char *t, int e)
 {
 	struct TS *pAux;
@@ -349,7 +336,6 @@ int existe(struct TS *pLista, char *n, char *t, int e)
 	return 1;
 }
 
-// Pesquisa um no e retorna o no
 char *pesquisaNome(struct TS *pLista, char *t, int e)
 {
 	struct TS *pAux;
@@ -359,7 +345,6 @@ char *pesquisaNome(struct TS *pLista, char *t, int e)
 	return pAux->nome;
 }
 
-// Pesquisa um no pelo nome, valor e escopo e retorna o tipo
 char *pesquisaTipo(struct TS *pLista, char *n, int e)
 {
 	struct TS *pAux;
@@ -369,7 +354,6 @@ char *pesquisaTipo(struct TS *pLista, char *n, int e)
 	return pAux->tipo;	
 }
 
-// Pesquisa um no pelo nome, tipo e escopo e retorna o valor
 int pesquisaValor(struct TS *pLista, char *n, char *t, int e)
 {
 	struct TS *pAux;
@@ -379,7 +363,6 @@ int pesquisaValor(struct TS *pLista, char *n, char *t, int e)
 	return pAux->valor;	
 }
 
-// Pesquisa um no pelo nome, tipo e valor e retorna o escopo
 int pesquisaEscopo(struct TS *pLista, char *n, char *t)
 {
 	struct TS *pAux;
@@ -389,7 +372,6 @@ int pesquisaEscopo(struct TS *pLista, char *n, char *t)
 	return pAux->escopo;	
 }
 
-// Verifica se a informação é Caractere ou Literal
 char *verificaString(char *s)
 {
 	if(strlen(s)>3)
@@ -403,13 +385,12 @@ char *verificaString(char *s)
 	return caractere;
 }
 
-// Relatorio de Erros Semanticos em Variaveis
 void geraRESporNo(struct TS *pNo)
 {
 	if(pNo->valor!=0)
 	{
 		struct TS *pAux = pNo;
-		printf("%d:%d: Erro: [%s]", pAux->local.first_line, pAux->local.first_column, pAux->nome);
+		printf("Na Linha %d:%d: Erro na Variavel %s", pAux->local.first_line, pAux->local.last_column, pAux->nome);
 		int contador = 0;
 		int registro = pAux->valor;
 		while(registro!=0)
@@ -485,6 +466,7 @@ void geraRESporNo(struct TS *pNo)
 				contador = 0;
 			}
 		}
+		printf("\n-----------------\n");
 	}
 }
 

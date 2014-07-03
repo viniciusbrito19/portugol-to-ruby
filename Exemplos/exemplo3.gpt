@@ -1,0 +1,18 @@
+ALGORITMO Fibonacci; 
+VARIAVEIS 
+a,b,auxiliar,i,n:INTEIRO; 
+ab,cont:REAL;
+FIM-VARIAVEIS 
+INICIO
+	a := 0;
+	b := 1;
+	imprima("Digite um numero:");
+	n:=leia();
+	imprima("Serie de Fibonacci:",b);
+	para i de 1 ate n faca
+		auxiliar := a + b;
+		a := b;
+		b := auxiliar;
+		imprima("-",auxiliar);
+	fim-para
+FIM

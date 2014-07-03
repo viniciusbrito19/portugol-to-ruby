@@ -627,10 +627,7 @@ literal:
 
 %%
  
-void yyerror(const char* errmsg)
-{
-	printf("\n*** Erro: %s\n", errmsg);
-}
+void yyerror(const char* errmsg){}
  
 int main(int argc, char* argv[])
 {

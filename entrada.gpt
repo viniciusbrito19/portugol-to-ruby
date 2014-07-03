@@ -4,14 +4,14 @@ res,fat,x,idade:INTEIRO;
 ab,cont:REAL;
 FIM-VARIAVEIS 
 INICIO
-	imprima("Digite um número:");
+	imprima("Digite um numero:");
 	fat:=leia();
 	res := 1;
 	para x de 1 ate fat faca
-		res := 2+2;
+		res := res*x;
 	
 	fim-para	
 
-	imprima("Resultado é:",res);
+	imprima("Resultado e:",res);
 
 FIM

@@ -1,0 +1,15 @@
+ALGORITMO ErroAtribuicao;
+VARIAVEIS
+inteiroRecebeReal:INTEIRO;
+realRecebeString:REAL;
+logicoRecebeInteiro:LOGICO;
+stringRecebeLogico:LITERAL;
+charRecebeStr:CARACTERE;
+FIM-VARIAVEIS
+INICIO
+	inteiroRecebeReal := 3/2;
+	realRecebeString := "FC";
+	logicoRecebeInteiro := 2;
+	stringRecebeLogico := 2>3;
+	charRecebeStr := "FC";
+FIM

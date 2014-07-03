@@ -14,7 +14,7 @@ yylloc.first_column = yycolumn; yylloc.last_column = yycolumn+yyleng-1; \
 /* Definições */
 DIGITO [0-9]
 DEC_LIT {DIGITO}+
-INT_LIT ("+"|"-"){DEC_LIT}
+INT_LIT ("+"|"-").{DEC_LIT}
 REAL_LIT {DEC_LIT}+("."{DEC_LIT})
 IDENTIFICADOR [a-zA-Z_][a-zA-Z0-9_]*
 LETRA [A-Za-záÉçãêü\)\(@\{\}/]+

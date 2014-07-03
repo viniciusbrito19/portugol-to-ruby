@@ -19,5 +19,8 @@ ptrc: clean ptrcheck ptrmake
 	./filechecker entrada.gpt
 	./ptrc entrada.gpt >> saida.rb
 
+run: ptrc
+	ruby saida.rb
+
 clean:
 	rm -f scanner.c parser_logger.c parser_logger.h parser_main.h parser_main.c saida.rb filechecker ptrc
