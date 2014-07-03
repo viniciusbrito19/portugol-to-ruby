@@ -8,7 +8,7 @@ INICIO
 	fat:=leia();
 	res := 1;
 	para x de 1 ate fat faca
-		res := 2+2;
+		res := res*x;
 	
 	fim-para	
 
